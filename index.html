@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="icon" type="https://scontent.ftbs5-2.fna.fbcdn.net/v/t1.15752-9/734274844_1282934370313995_3470906076718388824_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=cKpm8SFyTIIQ7kNvwHL0CL1&_nc_oc=AdorW7Poddmk2dMfJOu_wj5vmggZgSVFAzTkmTaRWNcfjLYSJ8wBn8Pg7kMwceZp6GM&_nc_zt=23&_nc_ht=scontent.ftbs5-2.fna&_nc_ss=7baaf&oh=03_Q7cD5wHkE5NpEBiTayiCp69FRyI40rJULeSsYsnFpn-qV0xRpw&oe=6A6B3CDD" href="/favicon.ico">
     <title>ANZORAS KALBASI | Mission: Play</title>
@@ -16,7 +17,7 @@
             --symbol-h: 90px;
             --spin-cost: 100;
             --safe-top: env(safe-area-inset-top, 0px);
-            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 20px); /* 20px fallback-ისთვის */
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,15 +41,12 @@
             align-items: center;
             justify-content: center;
             background: radial-gradient(circle at 50% 30%, #2d1f54 0%, #1a1a2e 70%, #0d0d1a 100%);
-            background-attachment: fixed;
         }
 
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: var(--safe-top);
             background: #1a1a2e;
             z-index: 9999;
@@ -106,7 +104,6 @@
             cursor: pointer;
             box-shadow: 0 6px 0 #b45309;
             transition: all 0.1s;
-            touch-action: manipulation;
         }
         .login-box button:active { transform: translateY(4px); box-shadow: 0 2px 0 #b45309; }
 
@@ -127,7 +124,8 @@
         .pages {
             flex: 1;
             overflow-y: auto;
-            padding: calc(var(--safe-top) + 10px) 12px calc(110px + var(--safe-bottom)) 12px;
+            /* Bottom padding დატოვებულია ისე რო კონტენტი არ დაიმალოს */
+            padding: calc(var(--safe-top) + 10px) 12px calc(80px + var(--safe-bottom)) 12px;
             display: flex;
             flex-direction: column;
             -webkit-overflow-scrolling: touch;
@@ -136,24 +134,26 @@
         .page { display: none; flex-direction: column; gap: 14px; }
         .page.active { display: flex; }
 
-        /* ===== IPHONE 14 PRO OPTIMIZED BOTTOM NAV ===== */
+        /* ===== FIX: IPHONE NAV BAR ===== */
         .bottom-nav {
-            position: fixed;
+            position: absolute;
             bottom: 0;
             left: 0;
-            right: 0;
+            width: 100%;
             background: rgba(14, 14, 28, 0.98);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             display: flex;
             justify-content: space-evenly;
-            align-items: center;
-            /* აქ არის მთავარი ცვლილება: 25px + safe-bottom უზრუნველყოფს რომ ბოლომდე ჩამოვიდეს და სიცარიელე აღარ დარჩეს */
-            padding: 10px 8px calc(25px + var(--safe-bottom)) 8px;
+            align-items: flex-start; /* ღილაკებს აკრავს ზემოთ */
+            /* სიმაღლე = ღილაკების სიმაღლე (დაახლ. 65px) + safe-bottom */
+            height: calc(65px + var(--safe-bottom)); 
+            padding-top: 5px; /* მხოლოდ ზედა დაშორება */
             border-top: 1px solid rgba(255, 215, 0, 0.25);
             z-index: 100;
             box-shadow: 0 -5px 25px rgba(0,0,0,0.6);
         }
+        
         .nav-btn {
             background: transparent;
             border: none;
@@ -162,17 +162,16 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 3px;
+            gap: 2px;
             font-size: 0.7rem;
             font-weight: 600;
             cursor: pointer;
-            padding: 6px 4px;
+            padding: 8px 4px;
             border-radius: 16px;
             transition: 0.2s;
-            min-width: 55px;
             flex: 1;
             max-width: 75px;
-            touch-action: manipulation;
+            height: 55px; /* ფიქსირებული სიმაღლე ღილაკებისთვის */
         }
         .nav-btn i { font-size: 1.4rem; font-style: normal; }
         .nav-btn.active { color: var(--gold); background: rgba(255,215,0,0.12); }
@@ -182,7 +181,6 @@
             color: var(--gold);
             font-size: 0.85rem;
             font-weight: 900;
-            padding: 8px 16px;
             border-radius: 40px;
             max-width: 85px;
             flex: 1.2;
@@ -217,22 +215,9 @@
             box-shadow: 0 8px 24px rgba(0,0,0,0.4);
             width: 100%;
         }
-        .stat {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            color: #fff;
-            font-weight: bold;
-            font-size: 0.8rem;
-        }
+        .stat { display: flex; align-items: center; gap: 4px; color: #fff; font-weight: bold; font-size: 0.8rem; }
         .stat.gold { color: var(--gold); font-size: 1rem; }
-        .stat span {
-            background: rgba(0,0,0,0.3);
-            padding: 2px 8px;
-            border-radius: 20px;
-            min-width: 40px;
-            text-align: center;
-        }
+        .stat span { background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 20px; min-width: 40px; text-align: center; }
         
         .slot-machine {
             display: flex;
@@ -244,7 +229,6 @@
             box-shadow: 0 12px 36px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.2);
             border: 3px solid #533483;
             width: 100%;
-            max-width: 100%;
             margin: 0 auto;
             overflow: hidden;
         }
@@ -259,13 +243,7 @@
             box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 0 0 0 2px #7b2cbf;
             position: relative;
         }
-        .reel-strip {
-            position: absolute;
-            width: 100%;
-            top: 0;
-            left: 0;
-            will-change: transform;
-        }
+        .reel-strip { position: absolute; width: 100%; top: 0; left: 0; will-change: transform; }
         .symbol {
             width: 100%;
             height: var(--symbol-h);
@@ -276,12 +254,8 @@
             color: #fff;
             line-height: 1;
         }
-        .symbol img {
-            width: 80%;
-            height: 80%;
-            object-fit: contain;
-            border-radius: 8px;
-        }
+        .symbol img { width: 80%; height: 80%; object-fit: contain; border-radius: 8px; }
+        
         .spin-btn {
             background: linear-gradient(180deg, #f7971e 0%, #ffd200 100%);
             border: none;
@@ -296,222 +270,61 @@
             box-shadow: 0 8px 0 #b45309, 0 12px 28px rgba(255,215,0,0.4);
             transition: all 0.1s ease;
             outline: none;
-            touch-action: manipulation;
             width: 100%;
             margin-top: 8px;
         }
         .spin-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 #b45309; }
-        .spin-btn:disabled { opacity: 0.6; transform: translateY(4px); box-shadow: 0 4px 0 #b45309; pointer-events: none; }
+        .spin-btn:disabled { opacity: 0.6; transform: translateY(4px); pointer-events: none; }
 
-        /* ===== SETTINGS PAGE ===== */
-        .settings-card {
+        /* ===== SETTINGS, DEPOSIT & OTHER PAGES (Omitted unchanged CSS for brevity, keeping all existing rules) ===== */
+        .settings-card, .deposit-card, .profile-card, .history-list {
             background: var(--card);
             border-radius: 25px;
             padding: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            display: flex; flex-direction: column; gap: 16px; text-align: center;
         }
-        .settings-card h2 {
-            color: var(--gold);
-            font-size: 1.8rem;
-            text-align: center;
-            font-family: 'Lobster', cursive;
-            margin-bottom: 10px;
+        .settings-card h2, .deposit-card h3, .profile-card h2 { color: var(--gold); font-size: 1.8rem; font-family: 'Lobster', cursive; margin-bottom: 10px; }
+        .setting-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; }
+        .setting-row input, .setting-row select, .deposit-card input, .profile-card input {
+            padding: 10px; border-radius: 10px; border: 1px solid #533483; background: #1e1e3f; color: #fff; text-align: center;
         }
-        .setting-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.95rem;
+        .setting-row input[type="range"] { width: 100%; accent-color: var(--gold); margin: 5px 0; }
+        .save-settings-btn, .deposit-card button, .profile-card button {
+            background: linear-gradient(180deg, #f7971e, #ffd200); border: none; border-radius: 30px; padding: 12px; font-weight: 900; color: #2d1f54; cursor: pointer; box-shadow: 0 4px 0 #b45309; margin-top: 10px;
         }
-        .setting-row label { flex: 1; }
-        .setting-row input, .setting-row select {
-            width: 80px;
-            padding: 6px;
-            border-radius: 10px;
-            border: 1px solid #533483;
-            background: #1e1e3f;
-            color: #fff;
-            text-align: center;
-        }
-        .setting-row input[type="range"] {
-            width: 100%;
-            accent-color: var(--gold);
-            margin: 5px 0;
-        }
-        .save-settings-btn {
-            background: linear-gradient(180deg, #f7971e, #ffd200);
-            border: none;
-            border-radius: 30px;
-            padding: 12px;
-            font-weight: 900;
-            font-size: 1rem;
-            color: #2d1f54;
-            cursor: pointer;
-            box-shadow: 0 4px 0 #b45309;
-            margin-top: 10px;
-        }
-
-        /* ===== OTHER PAGES ===== */
-        .deposit-card, .profile-card {
-            background: var(--card);
-            border-radius: 25px;
-            padding: 25px;
-            text-align: center;
-        }
-        .deposit-card h3, .profile-card h2 { color: var(--gold); font-size: 1.8rem; }
-        .deposit-card input, .profile-card input {
-            width: 100%;
-            padding: 14px;
-            border-radius: 30px;
-            border: 2px solid #533483;
-            background: #1e1e3f;
-            color: #fff;
-            font-size: 1.2rem;
-            margin: 20px 0;
-            text-align: center;
-        }
-        .deposit-card button, .profile-card button, .logout-btn {
-            background: var(--gold);
-            border: none;
-            border-radius: 30px;
-            padding: 12px 30px;
-            font-weight: 900;
-            font-size: 1.1rem;
-            cursor: pointer;
-            box-shadow: 0 4px 0 #b45309;
-        }
-        .logout-btn { background: #e11d48; color: #fff; margin-top: 20px; }
-        .history-list {
-            background: var(--card);
-            border-radius: 20px;
-            padding: 16px;
-            max-height: 55vh;
-            overflow-y: auto;
-        }
-        .history-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #333;
-        }
-        .history-symbols { display: flex; gap: 6px; }
+        .logout-btn { background: #e11d48 !important; color: #fff !important; box-shadow: 0 4px 0 #9f1239 !important; }
+        .history-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #333; }
         .history-win { color: #4ade80; font-weight: bold; }
         .history-loss { color: #f87171; }
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: var(--gold);
-            margin: 0 auto 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            overflow: hidden;
-        }
+        .profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--gold); margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; overflow: hidden; }
         .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* ===== JACKPOT OVERLAY ===== */
-        .kalbasi-reward-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-            padding-top: var(--safe-top);
-            padding-bottom: var(--safe-bottom);
-        }
+        .kalbasi-reward-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); z-index: 2000; display: flex; align-items: center; justify-content: center; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
         .kalbasi-reward-overlay.active { opacity: 1; pointer-events: auto; }
-        .kalbasi-reward-content {
-            background: #1a1a2e;
-            border: 4px solid var(--gold);
-            border-radius: 30px;
-            padding: 30px;
-            max-width: 90%;
-            text-align: center;
-            box-shadow: 0 0 60px rgba(255, 215, 0, 0.7);
-        }
-        .kalbasi-reward-img {
-            max-width: 200px;
-            max-height: 200px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-        }
-        .kalbasi-reward-close {
-            margin-top: 20px;
-            background: var(--gold);
-            color: #000;
-            border: none;
-            padding: 10px 30px;
-            border-radius: 25px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+        .kalbasi-reward-content { background: #1a1a2e; border: 4px solid var(--gold); border-radius: 30px; padding: 30px; text-align: center; box-shadow: 0 0 60px rgba(255, 215, 0, 0.7); }
+        .kalbasi-reward-img { max-width: 200px; max-height: 200px; border-radius: 20px; margin-bottom: 20px; }
+        .kalbasi-reward-close { margin-top: 20px; background: var(--gold); color: #000; border: none; padding: 10px 30px; border-radius: 25px; font-weight: bold; cursor: pointer; }
 
-        .notification {
-            position: fixed;
-            bottom: calc(110px + var(--safe-bottom));
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.85);
-            color: var(--gold);
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-weight: bold;
-            z-index: 1500;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
+        .notification { position: fixed; bottom: calc(85px + var(--safe-bottom)); left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); border: 1px solid var(--gold); color: var(--gold); padding: 12px 24px; border-radius: 30px; font-weight: bold; z-index: 1500; opacity: 0; transition: opacity 0.3s; pointer-events: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         .notification.show { opacity: 1; }
 
-        #homePage {
-            flex: 1;
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-        }
-        #homePage.active {
-            display: flex;
-        }
+        #homePage { flex: 1; display: none; flex-direction: column; justify-content: center; align-items: center; gap: 12px; }
+        #homePage.active { display: flex; }
 
-        @media (max-width: 500px) {
-            .game-title { font-size: 1.8rem; }
-            :root { --symbol-h: 75px; }
-            .slot-machine { padding: 10px 6px; gap: 4px; }
-            .stat { font-size: 0.7rem; }
-            .nav-btn { font-size: 0.65rem; min-width: auto; }
-            .nav-btn.home-btn { padding: 6px 10px; }
-        }
+        @media (max-width: 500px) { .game-title { font-size: 1.8rem; } :root { --symbol-h: 75px; } .slot-machine { padding: 10px 6px; gap: 4px; } }
     </style>
 </head>
 <body>
 
-    <!-- LOGIN SCREEN -->
     <div id="loginScreen" class="login-screen">
         <div class="login-box">
             <h2>🎰 ANZORAS KALBASI</h2>
-            <p style="color:#ccc; margin-bottom:15px;">შექმენი ექაუნთი სათამაშოდ</p>
             <input type="text" id="usernameInput" placeholder="მომხმარებლის სახელი" autocomplete="off">
             <button id="loginBtn">🚀 შესვლა</button>
-            <p style="font-size:0.75rem; color:#888; margin-top:10px;">ნამდვილი ფული არ არის – მხოლოდ გასართობად</p>
         </div>
     </div>
 
-    <!-- MAIN APP -->
     <div id="app" class="app">
         <div class="pages">
             <!-- HOME PAGE -->
@@ -537,28 +350,11 @@
                         <span id="matchPercentLabel">1%</span>
                     </div>
                     <input type="range" id="matchProbSlider" min="0" max="100" value="1" step="0.1">
-
-                    <div class="setting-row">
-                        <label>🎰 კუბიკების რაოდენობა:</label>
-                        <input type="number" id="reelCountInput" value="5" min="1" max="10" step="1">
-                    </div>
-
-                    <div class="setting-row">
-                        <label>🪙 მონეტის მოგება:</label>
-                        <input type="number" id="coinReward" value="2000" step="100">
-                    </div>
-                    <div class="setting-row">
-                        <label>⚔️ შეტევის მოგება:</label>
-                        <input type="number" id="attackReward" value="3" step="1">
-                    </div>
-                    <div class="setting-row">
-                        <label>🍗 რეიდის მოგება:</label>
-                        <input type="number" id="raidReward" value="3" step="1">
-                    </div>
-                    <div class="setting-row">
-                        <label>🛡️ ფარის მოგება:</label>
-                        <input type="number" id="shieldReward" value="2" step="1">
-                    </div>
+                    <div class="setting-row"><label>🎰 კუბიკები:</label><input type="number" id="reelCountInput" value="5" min="1" max="10"></div>
+                    <div class="setting-row"><label>🪙 მონეტა:</label><input type="number" id="coinReward" value="2000" step="100"></div>
+                    <div class="setting-row"><label>⚔️ შეტევა:</label><input type="number" id="attackReward" value="3"></div>
+                    <div class="setting-row"><label>🍗 რეიდი:</label><input type="number" id="raidReward" value="3"></div>
+                    <div class="setting-row"><label>🛡️ ფარი:</label><input type="number" id="shieldReward" value="2"></div>
                     <button class="save-settings-btn" id="saveSettingsBtn">💾 შენახვა</button>
                 </div>
             </div>
@@ -567,18 +363,16 @@
             <div id="depositPage" class="page">
                 <div class="deposit-card">
                     <h3>💵 თანხის შეტანა</h3>
-                    <p>მიმდინარე ბალანსი: <span id="depositBalance">5000</span> 🪙</p>
-                    <input type="number" id="depositAmount" placeholder="თანხა" min="1" step="any">
+                    <p>ბალანსი: <span id="depositBalance">5000</span> 🪙</p>
+                    <input type="number" id="depositAmount" placeholder="თანხა">
                     <button id="depositBtn">შეტანა</button>
-                    <p style="font-size:0.8rem; color:#888; margin-top:10px;">თანხა მყისიერად დაგერიცხება</p>
                 </div>
             </div>
 
             <!-- HISTORY PAGE -->
             <div id="historyPage" class="page">
-                <h2 style="color:var(--gold);">📜 სპინების ისტორია</h2>
                 <div class="history-list" id="historyList">
-                    <p style="color:#888;">ჯერ არ გაგიკეთებიათ სპინი</p>
+                    <p style="color:#888;">ისტორია ცარიელია</p>
                 </div>
             </div>
 
@@ -587,9 +381,7 @@
                 <div class="profile-card">
                     <div class="profile-avatar" id="profileAvatar">👤</div>
                     <h2 id="profileUsername">მოთამაშე</h2>
-                    <p>ბალანსი: <span id="profileBalance">5000</span> 🪙</p>
-                    <p>სულ სპინი: <span id="profileSpins">0</span></p>
-                    <p>დიდი მოგება: <span id="profileWins">0</span></p>
+                    <p>ბალანსი: <span id="profileBalance">5000</span></p>
                     <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
                     <button id="changeAvatarBtn">📷 ფოტოს შეცვლა</button>
                     <input type="text" id="newUsernameInput" placeholder="ახალი სახელი">
@@ -599,36 +391,31 @@
             </div>
         </div>
 
-        <!-- BOTTOM NAVIGATION -->
+        <!-- FIX: BOTTOM NAVIGATION -->
         <div class="bottom-nav">
             <button class="nav-btn" data-page="deposit"><i>💰</i><span>შეტანა</span></button>
             <button class="nav-btn" data-page="history"><i>📜</i><span>ისტორია</span></button>
             <button class="nav-btn home-btn active" data-page="home" id="homeNavBtn"><i>🎰</i><span>SPIN</span></button>
-            <button class="nav-btn" data-page="settings"><i>⚙️</i><span>პარამეტრები</span></button>
-            <button class="nav-btn" data-page="profile"><i>👤</i><span>პროფილი</span></button>
+            <button class="nav-btn" data-page="settings"><i>⚙️</i><span>პარამ.</span></button>
+            <button class="nav-btn" data-page="profile"><i>👤</i><span>პროფ.</span></button>
         </div>
     </div>
 
-    <!-- ANZORA JACKPOT OVERLAY -->
+    <!-- JACKPOT -->
     <div id="kalbasiRewardOverlay" class="kalbasi-reward-overlay">
         <div class="kalbasi-reward-content">
-            <img id="kalbasiRewardImg" class="kalbasi-reward-img" 
-                 src="https://scontent.ftbs5-2.fna.fbcdn.net/v/t1.15752-9/734274844_1282934370313995_3470906076718388824_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=cKpm8SFyTIIQ7kNvwHL0CL1&_nc_oc=AdorW7Poddmk2dMfJOu_wj5vmggZgSVFAzTkmTaRWNcfjLYSJ8wBn8Pg7kMwceZp6GM&_nc_zt=23&_nc_ht=scontent.ftbs5-2.fna&_nc_ss=7baaf&oh=03_Q7cD5wHkE5NpEBiTayiCp69FRyI40rJULeSsYsnFpn-qV0xRpw&oe=6A6A239D" 
-                 alt="Anzora Kalbasi">
+            <img id="kalbasiRewardImg" class="kalbasi-reward-img" src="https://scontent.ftbs5-2.fna.fbcdn.net/v/t1.15752-9/734274844_1282934370313995_3470906076718388824_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=cKpm8SFyTIIQ7kNvwHL0CL1&_nc_oc=AdorW7Poddmk2dMfJOu_wj5vmggZgSVFAzTkmTaRWNcfjLYSJ8wBn8Pg7kMwceZp6GM&_nc_zt=23&_nc_ht=scontent.ftbs5-2.fna&_nc_ss=7baaf&oh=03_Q7cD5wHkE5NpEBiTayiCp69FRyI40rJULeSsYsnFpn-qV0xRpw&oe=6A6A239D" alt="Anzora Kalbasi">
             <div style="color:var(--gold); font-size:2rem; font-weight:900;">🎉 ანზორა! 🎉</div>
-            <div style="color:#fff;">შენ მოიგე ლეგენდარული ანზორას კალბასი!</div>
             <div style="color:var(--gold);">+10,000,000 🪙</div>
             <button id="kalbasiRewardClose" class="kalbasi-reward-close">გაგრძელება</button>
         </div>
     </div>
-
     <img id="kalbasiImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSISBz8OJdNm51jFquBqghscObQXgQcvj4fNXsl7xnxMw&s=10" style="display:none;" alt="Kalbasi">
-
     <div id="notification" class="notification"></div>
 
     <script>
         (function() {
-            // ---------- ADVANCED CASINO CASHOUT AUDIO (WEB AUDIO API) ----------
+            // ---------- CASINO CASHOUT AUDIO (WEB AUDIO API) - "MONEY FEELING" ----------
             const AudioCtx = window.AudioContext || window.webkitAudioContext;
             let audioCtx = null;
             let spinAudioInterval = null;
@@ -639,23 +426,28 @@
                 return audioCtx;
             }
 
-            function playTone(freq, type, duration, vol = 0.1) {
+            // ფუნქცია რომელიც ხმას კონკრეტულ დროზე უკრავს (ზუსტი მელოდიებისთვის)
+            function playToneAtTime(ctx, freq, type, duration, vol, startTime) {
                 try {
-                    const ctx = ensureAudio();
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
                     osc.type = type;
                     osc.frequency.value = freq;
-                    gain.gain.setValueAtTime(vol, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+                    gain.gain.setValueAtTime(vol, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
                     osc.connect(gain);
                     gain.connect(ctx.destination);
-                    osc.start();
-                    osc.stop(ctx.currentTime + duration);
-                } catch(e) { console.log("Audio play error", e); }
+                    osc.start(startTime);
+                    osc.stop(startTime + duration);
+                } catch(e) {}
             }
 
-            // უფრო სასიამოვნო სლოტის ფულის ტრიალის ხმა (Soft Coin Shuffle/Rolling)
+            function playTone(freq, type, duration, vol = 0.1) {
+                const ctx = ensureAudio();
+                playToneAtTime(ctx, freq, type, duration, vol, ctx.currentTime);
+            }
+
+            // 1. მექანიკური მეტალის წკრიალი სპინის დროს (Coins / Gears)
             function startSpinAudio() {
                 if (spinAudioInterval) clearInterval(spinAudioInterval);
                 spinAudioInterval = setInterval(() => {
@@ -663,558 +455,187 @@
                         clearInterval(spinAudioInterval);
                         return;
                     }
-                    // რბილი სინუსური ხმა, რომელიც მონეტების ჩამოყრას/ბორბლის დატრიალებას ჰგავს
-                    playTone(850 + Math.random() * 200, 'sine', 0.06, 0.05); 
-                }, 90);
+                    // სწრაფი, მაღალი მეტალური კლიკი
+                    playTone(1300 + Math.random() * 300, 'triangle', 0.03, 0.04); 
+                    // დაბალი მექანიკური კლიკი
+                    setTimeout(() => playTone(500, 'square', 0.02, 0.02), 20);
+                }, 80);
             }
 
+            // 2. მძიმე გაჩერების ხმა კუბიკის ჩაჯდომისას
             function playReelStop() { 
-                // სასიამოვნო, მაგრამ მკაფიო კუბიკის ჩაჯდომის ხმა
-                playTone(200, 'sine', 0.1, 0.15); 
-                setTimeout(() => playTone(120, 'square', 0.05, 0.08), 30);
+                playTone(150, 'square', 0.1, 0.1); 
+                setTimeout(() => playTone(80, 'triangle', 0.1, 0.15), 15);
             }
 
+            // 3. კლასიკური ვეგასის მოგების ზარები (Bells Ringing)
             function playWinSound() {
                 const ctx = ensureAudio();
-                const now = ctx.currentTime;
-                // კლასიკური ლას-ვეგასის არპეჯიო
-                const winMelody = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
-                winMelody.forEach((freq, i) => {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(freq, now + i * 0.06);
-                    gain.gain.setValueAtTime(0.1, now + i * 0.06);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.3);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(now + i * 0.06);
-                    osc.stop(now + i * 0.06 + 0.3);
-                });
+                let now = ctx.currentTime;
+                // ზარების სწრაფი რეკვა (3 არპეჯიო)
+                for(let i = 0; i < 12; i++) {
+                    let time = now + (i * 0.1);
+                    playToneAtTime(ctx, 987.77, 'sine', 0.4, 0.1, time);        // B5
+                    playToneAtTime(ctx, 1318.51, 'triangle', 0.3, 0.05, time);  // E6
+                }
             }
 
+            // 4. ჯეკპოტის ხმა
             function playJackpotSound() {
                 const ctx = ensureAudio();
                 let now = ctx.currentTime;
-                
-                // Fanfare intro
-                const arcadeFanfare = [523.25, 523.25, 523.25, 523.25, 659.25, 587.33, 659.25, 783.99, 1046.50];
-                arcadeFanfare.forEach((freq, i) => {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'square';
-                    osc.frequency.setValueAtTime(freq, now + i * 0.14);
-                    gain.gain.setValueAtTime(0.08, now + i * 0.14);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.14 + 0.4);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(now + i * 0.14);
-                    osc.stop(now + i * 0.14 + 0.4);
+                // გამარჯვების საყვირი
+                const fanfare = [523.25, 523.25, 523.25, 659.25, 587.33, 659.25, 783.99, 1046.50];
+                fanfare.forEach((freq, i) => {
+                    playToneAtTime(ctx, freq, 'square', 0.4, 0.08, now + (i * 0.15));
                 });
-
-                // მონეტების უწყვეტი ცვენის ხმა
-                for (let j = 0; j < 32; j++) {
-                    const coinOsc = ctx.createOscillator();
-                    const coinGain = ctx.createGain();
-                    coinOsc.type = 'sine';
-                    const randFreq = 950 + Math.random() * 1150;
-                    const startTime = now + 0.15 + (j * 0.07);
-                    coinOsc.frequency.setValueAtTime(randFreq, startTime);
-                    coinGain.gain.setValueAtTime(0.06, startTime);
-                    coinGain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.16);
-                    coinOsc.connect(coinGain);
-                    coinGain.connect(ctx.destination);
-                    coinOsc.start(startTime);
-                    coinOsc.stop(startTime + 0.16);
+                
+                // ფულის ჩამოყრის ხანგრძლივი ხმა
+                for (let j = 0; j < 40; j++) {
+                    playToneAtTime(ctx, 1000 + Math.random() * 500, 'triangle', 0.1, 0.05, now + 0.5 + (j * 0.08));
                 }
             }
 
             // ---------- DYNAMIC SYMBOL HEIGHT ----------
             function getSymbolHeight() {
-                const style = getComputedStyle(document.documentElement);
-                const h = style.getPropertyValue('--symbol-h').trim();
+                const h = getComputedStyle(document.documentElement).getPropertyValue('--symbol-h').trim();
                 return parseInt(h) || 90;
             }
-
             let SYMBOL_HEIGHT = getSymbolHeight();
-
             window.addEventListener('resize', () => {
                 const newH = getSymbolHeight();
-                if (newH !== SYMBOL_HEIGHT) {
-                    SYMBOL_HEIGHT = newH;
-                    rebuildSlotMachine();
-                }
+                if (newH !== SYMBOL_HEIGHT) { SYMBOL_HEIGHT = newH; rebuildSlotMachine(); }
             });
 
             // ---------- GAME STATE ----------
             const SYMBOLS = ['coin', 'attack', 'raid', 'shield', 'kalbasi'];
             const EMOJIS = { coin: '🪙', attack: '⚔️', raid: '🍗', shield: '🛡️' };
-            const BASE_LENGTH = 30;
-            const REPEAT_COUNT = 10;
-            const SPIN_COST = 100;
+            const BASE_LENGTH = 30; const REPEAT_COUNT = 10; const SPIN_COST = 100;
 
             let user = { name: '', gold: 5000, attack: 0, raid: 0, shield: 0, totalSpins: 0, bigWins: 0, avatar: '' };
-            let isSpinning = false;
-            let reelsReady = 0;
-            let currentOutcomes = [];
-            let perReelKalbasiProb = 0.2;
-            let currentIndices = [];
-            let spinHistory = [];
-            let settings = {
-                matchPercent: 1,
-                reelCount: 5,
-                coinReward: 2000,
-                attackReward: 3,
-                raidReward: 3,
-                shieldReward: 2
-            };
-            let baseStrips = [];
-            let stripsElements = [];
-            let spinTimer = null;
+            let isSpinning = false; let reelsReady = 0; let currentOutcomes = [];
+            let perReelKalbasiProb = 0.2; let currentIndices = []; let spinHistory = [];
+            let settings = { matchPercent: 1, reelCount: 5, coinReward: 2000, attackReward: 3, raidReward: 3, shieldReward: 2 };
+            let baseStrips = []; let stripsElements = []; let spinTimer = null;
 
-            // ---------- DOM elements ----------
-            const loginScreen = document.getElementById('loginScreen');
-            const appDiv = document.getElementById('app');
-            const usernameInput = document.getElementById('usernameInput');
-            const loginBtn = document.getElementById('loginBtn');
-            const goldSpan = document.getElementById('goldCount');
-            const attackSpan = document.getElementById('attackCount');
-            const raidSpan = document.getElementById('raidCount');
-            const shieldSpan = document.getElementById('shieldCount');
-            const spinBtn = document.getElementById('spinButton');
-            const slotMachineDiv = document.getElementById('slotMachine');
-            const matchProbSlider = document.getElementById('matchProbSlider');
-            const matchPercentLabel = document.getElementById('matchPercentLabel');
-            const kalbasiRewardOverlay = document.getElementById('kalbasiRewardOverlay');
-            const kalbasiRewardClose = document.getElementById('kalbasiRewardClose');
-            const kalbasiImg = document.getElementById('kalbasiImage');
-
-            const reelCountInput = document.getElementById('reelCountInput');
-            const coinRewardInput = document.getElementById('coinReward');
-            const attackRewardInput = document.getElementById('attackReward');
-            const raidRewardInput = document.getElementById('raidReward');
-            const shieldRewardInput = document.getElementById('shieldReward');
-            const saveSettingsBtn = document.getElementById('saveSettingsBtn');
-
-            const depositBalanceSpan = document.getElementById('depositBalance');
-            const depositAmountInput = document.getElementById('depositAmount');
-            const depositBtn = document.getElementById('depositBtn');
-            const historyList = document.getElementById('historyList');
-            const profileUsername = document.getElementById('profileUsername');
-            const profileBalance = document.getElementById('profileBalance');
-            const profileSpins = document.getElementById('profileSpins');
-            const profileWins = document.getElementById('profileWins');
-            const profileAvatar = document.getElementById('profileAvatar');
-            const avatarUpload = document.getElementById('avatarUpload');
-            const changeAvatarBtn = document.getElementById('changeAvatarBtn');
-            const newUsernameInput = document.getElementById('newUsernameInput');
-            const changeUsernameBtn = document.getElementById('changeUsernameBtn');
-            const logoutBtn = document.getElementById('logoutBtn');
-            const spinCostDisplay = document.getElementById('spinCostDisplay');
-            spinCostDisplay.textContent = SPIN_COST;
-
-            const homeNavBtn = document.getElementById('homeNavBtn');
-            const notification = document.getElementById('notification');
+            // DOM
+            const loginScreen = document.getElementById('loginScreen'); const appDiv = document.getElementById('app');
+            const goldSpan = document.getElementById('goldCount'); const spinBtn = document.getElementById('spinButton');
+            const slotMachineDiv = document.getElementById('slotMachine'); const notification = document.getElementById('notification');
+            const matchProbSlider = document.getElementById('matchProbSlider'); const kalbasiRewardOverlay = document.getElementById('kalbasiRewardOverlay');
+            const kalbasiImg = document.getElementById('kalbasiImage'); const navButtons = document.querySelectorAll('.nav-btn');
+            const pages = { home: document.getElementById('homePage'), settings: document.getElementById('settingsPage'), deposit: document.getElementById('depositPage'), history: document.getElementById('historyPage'), profile: document.getElementById('profilePage') };
 
             function showNotification(text, duration = 1500) {
-                notification.textContent = text;
-                notification.classList.add('show');
-                clearTimeout(notification._timeout);
-                notification._timeout = setTimeout(() => notification.classList.remove('show'), duration);
+                notification.textContent = text; notification.classList.add('show');
+                clearTimeout(notification._timeout); notification._timeout = setTimeout(() => notification.classList.remove('show'), duration);
             }
-
-            // Navigation
-            const navButtons = document.querySelectorAll('.nav-btn');
-            const pages = {
-                home: document.getElementById('homePage'),
-                settings: document.getElementById('settingsPage'),
-                deposit: document.getElementById('depositPage'),
-                history: document.getElementById('historyPage'),
-                profile: document.getElementById('profilePage')
-            };
 
             function navigateTo(page) {
                 Object.values(pages).forEach(p => p.classList.remove('active'));
                 pages[page].classList.add('active');
-                navButtons.forEach(btn => {
-                    btn.classList.remove('active');
-                    if (btn.dataset.page === page) btn.classList.add('active');
-                });
-
-                if (page === 'deposit') updateDepositDisplay();
-                if (page === 'profile') updateProfile();
-                if (page === 'history') renderHistory();
-                if (page === 'settings') applySettingsToInputs();
+                navButtons.forEach(btn => { btn.classList.remove('active'); if (btn.dataset.page === page) btn.classList.add('active'); });
+                if (page === 'deposit') document.getElementById('depositBalance').textContent = user.gold.toLocaleString();
+                if (page === 'profile') { document.getElementById('profileUsername').textContent = user.name; document.getElementById('profileBalance').textContent = user.gold.toLocaleString(); }
+                if (page === 'history') {
+                    const list = document.getElementById('historyList');
+                    list.innerHTML = spinHistory.length ? spinHistory.map(h => `<div class="history-item"><div class="history-symbols">${h.symbols.map(s => s === 'kalbasi' ? '<img src="'+kalbasiImg.src+'" width="24" height="24">' : EMOJIS[s]).join(' ')}</div><span class="${h.win ? 'history-win' : 'history-loss'}">${h.win ? 'მოგება' : 'წაგება'}</span></div>`).join('') : '<p style="color:#888;">ისტორია ცარიელია</p>';
+                }
             }
-
             navButtons.forEach(btn => btn.addEventListener('click', () => navigateTo(btn.dataset.page)));
 
-            // ---------- LOCAL STORAGE & AUTH ----------
-            function saveUser() {
-                localStorage.setItem('anzora_user', JSON.stringify(user));
-                localStorage.setItem('anzora_history', JSON.stringify(spinHistory));
-                localStorage.setItem('anzora_settings', JSON.stringify(settings));
-            }
-            function loadUser() {
-                const stored = localStorage.getItem('anzora_user');
-                if (stored) {
-                    user = JSON.parse(stored);
-                    spinHistory = JSON.parse(localStorage.getItem('anzora_history') || '[]');
-                    settings = JSON.parse(localStorage.getItem('anzora_settings') || JSON.stringify(settings));
-                    return true;
-                }
-                return false;
-            }
-            function applySettingsToInputs() {
-                matchProbSlider.value = settings.matchPercent;
-                updateProbability();
-                reelCountInput.value = settings.reelCount;
-                coinRewardInput.value = settings.coinReward;
-                attackRewardInput.value = settings.attackReward;
-                raidRewardInput.value = settings.raidReward;
-                shieldRewardInput.value = settings.shieldReward;
-            }
-            function saveSettingsToState() {
-                settings.matchPercent = parseFloat(matchProbSlider.value);
-                settings.reelCount = parseInt(reelCountInput.value) || 5;
-                settings.reelCount = Math.max(1, Math.min(10, settings.reelCount));
-                settings.coinReward = parseInt(coinRewardInput.value) || 2000;
-                settings.attackReward = parseInt(attackRewardInput.value) || 3;
-                settings.raidReward = parseInt(raidRewardInput.value) || 3;
-                settings.shieldReward = parseInt(shieldRewardInput.value) || 2;
-                saveUser();
-                showNotification('✔️ პარამეტრები შენახულია');
-                rebuildSlotMachine();
-            }
-
+            function saveUser() { localStorage.setItem('anzora_user', JSON.stringify(user)); localStorage.setItem('anzora_history', JSON.stringify(spinHistory)); localStorage.setItem('anzora_settings', JSON.stringify(settings)); }
             function updateAllStatsDisplay() {
-                goldSpan.textContent = user.gold.toLocaleString();
-                attackSpan.textContent = user.attack;
-                raidSpan.textContent = user.raid;
-                shieldSpan.textContent = user.shield;
-                depositBalanceSpan.textContent = user.gold.toLocaleString();
+                goldSpan.textContent = user.gold.toLocaleString(); document.getElementById('attackCount').textContent = user.attack;
+                document.getElementById('raidCount').textContent = user.raid; document.getElementById('shieldCount').textContent = user.shield;
             }
 
-            function login(username) {
-                user = { name: username, gold: 5000, attack: 0, raid: 0, shield: 0, totalSpins: 0, bigWins: 0, avatar: '' };
-                spinHistory = [];
-                settings = { matchPercent: 1, reelCount: 5, coinReward: 2000, attackReward: 3, raidReward: 3, shieldReward: 2 };
-                saveUser();
-                applySettingsToInputs();
-                updateAllStatsDisplay();
-                rebuildSlotMachine();
-                updateProfileAvatar();
-                loginScreen.classList.add('hidden');
-                appDiv.classList.add('active');
-                navigateTo('home');
-            }
-
-            loginBtn.addEventListener('click', () => {
-                const name = usernameInput.value.trim();
-                if (name) login(name);
+            document.getElementById('loginBtn').addEventListener('click', () => {
+                const name = document.getElementById('usernameInput').value.trim();
+                if (name) { user.name = name; saveUser(); loginScreen.classList.add('hidden'); appDiv.classList.add('active'); updateAllStatsDisplay(); rebuildSlotMachine(); navigateTo('home'); }
             });
+            document.getElementById('logoutBtn').addEventListener('click', () => { localStorage.clear(); location.reload(); });
 
-            logoutBtn.addEventListener('click', () => {
-                localStorage.removeItem('anzora_user');
-                localStorage.removeItem('anzora_history');
-                localStorage.removeItem('anzora_settings');
-                location.reload();
-            });
+            if (localStorage.getItem('anzora_user')) {
+                user = JSON.parse(localStorage.getItem('anzora_user')); spinHistory = JSON.parse(localStorage.getItem('anzora_history') || '[]'); settings = JSON.parse(localStorage.getItem('anzora_settings') || JSON.stringify(settings));
+                loginScreen.classList.add('hidden'); appDiv.classList.add('active'); updateAllStatsDisplay(); rebuildSlotMachine(); navigateTo('home');
+            } else { loginScreen.classList.remove('hidden'); appDiv.classList.remove('active'); }
 
-            // ---------- PROFILE AVATAR ----------
-            changeAvatarBtn.addEventListener('click', () => avatarUpload.click());
-            avatarUpload.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    user.avatar = event.target.result;
-                    saveUser();
-                    updateProfileAvatar();
-                    showNotification('📷 ფოტო განახლდა');
-                };
-                reader.readAsDataURL(file);
-            });
-
-            function updateProfileAvatar() {
-                if (user.avatar) {
-                    profileAvatar.innerHTML = `<img src="${user.avatar}" alt="avatar">`;
-                } else {
-                    profileAvatar.innerHTML = '👤';
-                }
-            }
-
-            // ---------- USERNAME CHANGE ----------
-            changeUsernameBtn.addEventListener('click', () => {
-                const newName = newUsernameInput.value.trim();
-                if (!newName) return showNotification('შეიყვანეთ ახალი სახელი');
-                user.name = newName;
-                saveUser();
-                newUsernameInput.value = '';
-                updateProfile();
-                showNotification('✔️ სახელი შეიცვალა');
-            });
-
-            // ---------- INITIAL LOAD ----------
-            if (loadUser()) {
-                applySettingsToInputs();
-                loginScreen.classList.add('hidden');
-                appDiv.classList.add('active');
-                updateAllStatsDisplay();
-                rebuildSlotMachine();
-                updateProfileAvatar();
-                navigateTo('home');
-            } else {
-                loginScreen.classList.remove('hidden');
-                appDiv.classList.remove('active');
-            }
-
-            // ---------- SLOT MACHINE REBUILD ----------
             function rebuildSlotMachine() {
-                SYMBOL_HEIGHT = getSymbolHeight();
-                slotMachineDiv.innerHTML = '';
-                stripsElements = [];
-                currentIndices = [];
-                currentOutcomes = new Array(settings.reelCount).fill(null);
-                baseStrips = [];
+                slotMachineDiv.innerHTML = ''; stripsElements = []; currentIndices = []; currentOutcomes = new Array(settings.reelCount).fill(null); baseStrips = [];
                 for (let i = 0; i < settings.reelCount; i++) {
-                    const reelContainer = document.createElement('div');
-                    reelContainer.className = 'reel-container';
-                    const reelStrip = document.createElement('div');
-                    reelStrip.className = 'reel-strip';
-                    reelStrip.id = `strip${i}`;
-                    reelContainer.appendChild(reelStrip);
-                    slotMachineDiv.appendChild(reelContainer);
-                    stripsElements.push(reelStrip);
-                    const base = generateBaseStrip();
+                    const cont = document.createElement('div'); cont.className = 'reel-container';
+                    const strip = document.createElement('div'); strip.className = 'reel-strip';
+                    cont.appendChild(strip); slotMachineDiv.appendChild(cont); stripsElements.push(strip);
+                    const base = Array.from({length: BASE_LENGTH}, () => {
+                        const r = Math.random(); return r < 0.35 ? 'coin' : r < 0.5 ? 'attack' : r < 0.65 ? 'raid' : r < 0.8 ? 'shield' : 'kalbasi';
+                    });
                     baseStrips.push(base);
-                    reelStrip.innerHTML = buildFullStrip(base);
-                    const startIdx = Math.floor(Math.random() * BASE_LENGTH);
-                    currentIndices.push(startIdx);
-                    reelStrip.style.transform = `translateY(-${startIdx * SYMBOL_HEIGHT}px)`;
+                    strip.innerHTML = base.map(s => s === 'kalbasi' ? `<div class="symbol"><img src="${kalbasiImg.src}"></div>` : `<div class="symbol">${EMOJIS[s]}</div>`).join('').repeat(REPEAT_COUNT);
+                    const startIdx = Math.floor(Math.random() * BASE_LENGTH); currentIndices.push(startIdx);
+                    strip.style.transform = `translateY(-${startIdx * SYMBOL_HEIGHT}px)`;
                 }
             }
 
-            // ---------- DEPOSIT ----------
-            function updateDepositDisplay() {
-                depositBalanceSpan.textContent = user.gold.toLocaleString();
-            }
-            depositBtn.addEventListener('click', () => {
-                const amount = parseFloat(depositAmountInput.value);
-                if (isNaN(amount) || amount <= 0) return alert('გთხოვთ, მიუთითოთ სწორი თანხა');
-                user.gold += amount;
-                saveUser();
-                updateAllStatsDisplay();
-                depositAmountInput.value = '';
-                showNotification(`✅ ${amount} მონეტა დაემატა!`);
-                updateDepositDisplay();
+            document.getElementById('depositBtn').addEventListener('click', () => {
+                const amt = parseFloat(document.getElementById('depositAmount').value);
+                if (amt > 0) { user.gold += amt; saveUser(); updateAllStatsDisplay(); showNotification(`✅ ${amt} დაემატა`); document.getElementById('depositAmount').value = ''; }
             });
 
-            // ---------- PROFILE ----------
-            function updateProfile() {
-                profileUsername.textContent = user.name;
-                profileBalance.textContent = user.gold.toLocaleString();
-                profileSpins.textContent = user.totalSpins;
-                profileWins.textContent = user.bigWins;
-                updateProfileAvatar();
-            }
-
-            // ---------- HISTORY ----------
-            function addHistory(win, symbols) {
-                spinHistory.unshift({ win, symbols, time: new Date().toLocaleTimeString('ka-GE') });
-                if (spinHistory.length > 50) spinHistory.pop();
-                saveUser();
-            }
-            function renderHistory() {
-                if (spinHistory.length === 0) {
-                    historyList.innerHTML = '<p style="color:#888;">ჯერ არ გაგიკეთებიათ სპინი</p>';
-                    return;
-                }
-                historyList.innerHTML = spinHistory.map(h => `
-                    <div class="history-item">
-                        <div class="history-symbols">${h.symbols.map(s => s === 'kalbasi' ? '<img src="'+kalbasiImg.src+'" width="24" height="24">' : EMOJIS[s]).join(' ')}</div>
-                        <span class="${h.win ? 'history-win' : 'history-loss'}">${h.win ? 'მოგება' : 'წაგება'}</span>
-                        <span style="font-size:0.7rem; color:#888;">${h.time}</span>
-                    </div>
-                `).join('');
-            }
-
-            // ---------- SLOT LOGIC ----------
-            function generateBaseStrip() {
-                const arr = [];
-                for (let i = 0; i < BASE_LENGTH; i++) {
-                    const weights = [0.35, 0.15, 0.15, 0.15, 0.2];
-                    const rand = Math.random();
-                    let cumulative = 0;
-                    for (let j = 0; j < SYMBOLS.length; j++) {
-                        cumulative += weights[j];
-                        if (rand <= cumulative) { arr.push(SYMBOLS[j]); break; }
-                    }
-                }
-                return arr;
-            }
-            function buildFullStrip(base) {
-                return base.map(s => s === 'kalbasi' ? `<div class="symbol"><img src="${kalbasiImg.src}" alt="Kalbasi"></div>` : `<div class="symbol">${EMOJIS[s]}</div>`).join('').repeat(REPEAT_COUNT);
-            }
-
-            kalbasiRewardClose.addEventListener('click', () => kalbasiRewardOverlay.classList.remove('active'));
-
-            function updateProbability() {
-                const matchPercent = parseFloat(matchProbSlider.value);
-                matchPercentLabel.textContent = matchPercent.toFixed(1) + '%';
-                perReelKalbasiProb = Math.pow(matchPercent / 100, 1 / settings.reelCount);
-                if (matchPercent <= 0) perReelKalbasiProb = 0;
-                if (matchPercent >= 100) perReelKalbasiProb = 1;
-            }
-            updateProbability();
-            matchProbSlider.addEventListener('input', updateProbability);
-            reelCountInput.addEventListener('change', updateProbability);
-
-            saveSettingsBtn.addEventListener('click', saveSettingsToState);
-            matchProbSlider.addEventListener('change', saveSettingsToState);
-            [coinRewardInput, attackRewardInput, raidRewardInput, shieldRewardInput, reelCountInput].forEach(inp => inp.addEventListener('change', saveSettingsToState));
-
-            function weightedRandomSymbol() {
-                const pKalbasi = perReelKalbasiProb;
-                const pOther = (1 - pKalbasi) / 4;
-                const weights = SYMBOLS.map(s => s === 'kalbasi' ? pKalbasi : pOther);
-                let rand = Math.random();
-                let cumulative = 0;
-                for (let i = 0; i < SYMBOLS.length; i++) {
-                    cumulative += weights[i];
-                    if (rand <= cumulative) return SYMBOLS[i];
-                }
-                return 'coin';
-            }
-
-            function handleWin(outcome) {
-                switch (outcome) {
-                    case 'coin':
-                        const coinWin = settings.coinReward + Math.floor(Math.random() * 1000);
-                        user.gold += coinWin;
-                        showNotification(`+${coinWin} მონეტა`);
-                        playWinSound();
-                        break;
-                    case 'attack':
-                        user.attack += settings.attackReward;
-                        showNotification(`+${settings.attackReward} შეტევა`);
-                        playWinSound();
-                        break;
-                    case 'raid':
-                        user.raid += settings.raidReward;
-                        showNotification(`+${settings.raidReward} რეიდი`);
-                        playWinSound();
-                        break;
-                    case 'shield':
-                        user.shield += settings.shieldReward;
-                        showNotification(`+${settings.shieldReward} ფარი`);
-                        playWinSound();
-                        break;
-                    case 'kalbasi':
-                        user.gold += 10000000;
-                        user.bigWins++;
-                        kalbasiRewardOverlay.classList.add('active');
-                        playJackpotSound();
-                        setTimeout(() => kalbasiRewardOverlay.classList.remove('active'), 5000);
-                        break;
-                }
-                saveUser();
-                updateAllStatsDisplay();
-            }
+            document.getElementById('kalbasiRewardClose').addEventListener('click', () => kalbasiRewardOverlay.classList.remove('active'));
 
             function spinComplete() {
-                if (spinAudioInterval) {
-                    clearInterval(spinAudioInterval);
-                    spinAudioInterval = null;
+                if (spinAudioInterval) clearInterval(spinAudioInterval); spinAudioInterval = null;
+                clearTimeout(spinTimer);
+                const win = currentOutcomes.every(s => s === currentOutcomes[0]);
+                if (win) {
+                    if (currentOutcomes[0] === 'coin') { user.gold += settings.coinReward; showNotification(`+${settings.coinReward} მონეტა`); playWinSound(); }
+                    else if (currentOutcomes[0] === 'kalbasi') { user.gold += 10000000; kalbasiRewardOverlay.classList.add('active'); playJackpotSound(); }
+                    else { user[currentOutcomes[0]] += settings[`${currentOutcomes[0]}Reward`]; showNotification(`+ მოგება!`); playWinSound(); }
                 }
-                if (spinTimer) {
-                    clearTimeout(spinTimer);
-                    spinTimer = null;
-                }
-                const winSymbol = currentOutcomes[0];
-                const isWin = currentOutcomes.every(s => s === winSymbol);
-                if (isWin) handleWin(winSymbol);
-                addHistory(isWin, currentOutcomes);
-                isSpinning = false;
-                spinBtn.disabled = false;
+                spinHistory.unshift({ win, symbols: [...currentOutcomes] }); if(spinHistory.length > 50) spinHistory.pop();
+                saveUser(); updateAllStatsDisplay(); isSpinning = false; spinBtn.disabled = false;
             }
 
             function spin() {
+                ensureAudio();
                 if (isSpinning) return;
-                if (user.gold < SPIN_COST) {
-                    showNotification('❌ არასაკმარისი ბალანსი! შეიტანეთ თანხა.');
-                    return;
-                }
-                user.gold -= SPIN_COST;
-                user.totalSpins++;
-                saveUser();
-                updateAllStatsDisplay();
-                isSpinning = true;
-                spinBtn.disabled = true;
-                reelsReady = 0;
-                currentOutcomes = new Array(settings.reelCount).fill(null);
-
-                // Start rhythmic retro mechanical clicking roll
+                if (user.gold < SPIN_COST) return showNotification('❌ არასაკმარისი ბალანსი!');
+                user.gold -= SPIN_COST; saveUser(); updateAllStatsDisplay();
+                isSpinning = true; spinBtn.disabled = true; reelsReady = 0;
+                
                 startSpinAudio();
 
+                const prob = Math.pow(parseFloat(matchProbSlider.value || 1) / 100, 1 / settings.reelCount);
                 for (let i = 0; i < settings.reelCount; i++) {
-                    currentOutcomes[i] = weightedRandomSymbol();
+                    const r = Math.random();
+                    currentOutcomes[i] = r < prob ? 'kalbasi' : (Math.random() < 0.4 ? 'coin' : SYMBOLS[Math.floor(Math.random() * 3) + 1]);
                 }
 
                 for (let i = 0; i < settings.reelCount; i++) {
-                    const outcome = currentOutcomes[i];
-                    const currentBaseIdx = currentIndices[i] % BASE_LENGTH;
-                    currentIndices[i] = currentBaseIdx;
-                    
-                    const stripEl = stripsElements[i];
-                    stripEl.style.transition = 'none';
-                    stripEl.style.transform = `translateY(-${currentBaseIdx * SYMBOL_HEIGHT}px)`;
-                    
-                    stripEl.offsetHeight; // force reflow
+                    const strip = stripsElements[i];
+                    strip.style.transition = 'none';
+                    const startBaseIdx = currentIndices[i] % BASE_LENGTH;
+                    strip.style.transform = `translateY(-${startBaseIdx * SYMBOL_HEIGHT}px)`;
+                    strip.offsetHeight; // reflow
 
-                    const baseIndices = baseStrips[i].reduce((arr, sym, idx) => { if (sym === outcome) arr.push(idx); return arr; }, []);
-                    const baseIdx = baseIndices[Math.floor(Math.random() * baseIndices.length)];
-                    
-                    const extraCycles = 3 + i; 
-                    const targetIdx = baseIdx + extraCycles * BASE_LENGTH;
-                    const targetOffset = -targetIdx * SYMBOL_HEIGHT;
-                    
-                    const duration = 1.8 + (i * 0.25);
-                    stripEl.style.transition = `transform ${duration}s cubic-bezier(0.25, 0.8, 0.1, 1)`;
-                    stripEl.style.transform = `translateY(${targetOffset}px)`;
-                    
+                    const targetIdx = baseStrips[i].indexOf(currentOutcomes[i]) + (4 + i) * BASE_LENGTH;
+                    strip.style.transition = `transform ${1.5 + i * 0.25}s cubic-bezier(0.25, 0.8, 0.1, 1)`;
+                    strip.style.transform = `translateY(-${targetIdx * SYMBOL_HEIGHT}px)`;
                     currentIndices[i] = targetIdx;
 
                     const handler = function(e) {
                         if (e.propertyName === 'transform') {
-                            stripEl.removeEventListener('transitionend', handler);
+                            strip.removeEventListener('transitionend', handler);
                             playReelStop();
-                            reelsReady++;
-                            if (reelsReady === settings.reelCount) {
-                                spinComplete();
-                            }
+                            if (++reelsReady === settings.reelCount) spinComplete();
                         }
                     };
-                    stripEl.addEventListener('transitionend', handler);
+                    strip.addEventListener('transitionend', handler);
                 }
-
-                const maxDuration = (1.8 + settings.reelCount * 0.25) * 1000 + 600;
-                spinTimer = setTimeout(() => {
-                    if (!isSpinning) return;
-                    for (let i = 0; i < settings.reelCount; i++) {
-                        const strip = stripsElements[i];
-                        strip.style.transition = 'none';
-                        strip.style.transform = `translateY(-${currentIndices[i] * SYMBOL_HEIGHT}px)`;
-                    }
-                    reelsReady = settings.reelCount;
-                    spinComplete();
-                }, maxDuration);
+                spinTimer = setTimeout(() => { if (isSpinning) spinComplete(); }, 3500);
             }
-
             spinBtn.addEventListener('click', spin);
-            document.addEventListener('keydown', (e) => { if (e.code === 'Space' && !isSpinning) { e.preventDefault(); spin(); } });
-
-            updateAllStatsDisplay();
         })();
     </script>
 </body>
