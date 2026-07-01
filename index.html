@@ -19,7 +19,7 @@
             --symbol-h: 90px;
             --spin-cost: 100;
             --safe-top: env(safe-area-inset-top, 0px);
-            --safe-bottom: env(safe-area-inset-bottom, 20px);
+            --safe-bottom: env(safe-area-inset-bottom, 20px); /* iPhone Safe Area */
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -52,7 +52,14 @@
         .page.active { display: flex; }
 
         /* ===== FIX: IPHONE NAV BAR ===== */
-        .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(14, 14, 28, 0.98); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); display: flex; justify-content: space-evenly; align-items: flex-end; height: 65px; padding-top: 5px; padding-bottom: 0; border-top: 1px solid rgba(255, 215, 0, 0.25); z-index: 100; box-shadow: 0 -5px 25px rgba(0,0,0,0.6); }
+        .bottom-nav { 
+            position: absolute; bottom: 0; left: 0; width: 100%; 
+            background: rgba(14, 14, 28, 0.98); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
+            display: flex; justify-content: space-evenly; align-items: center; 
+            height: calc(65px + var(--safe-bottom)); /* Dynamic height for iOS */
+            padding-top: 5px; padding-bottom: var(--safe-bottom); /* iOS safe padding */
+            border-top: 1px solid rgba(255, 215, 0, 0.25); z-index: 100; box-shadow: 0 -5px 25px rgba(0,0,0,0.6); 
+        }
         .nav-btn { background: transparent; border: none; color: #aaa; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 0.7rem; font-weight: 600; cursor: pointer; padding: 8px 4px; border-radius: 16px; transition: 0.2s; flex: 1; max-width: 75px; height: 55px; }
         .nav-btn i { font-size: 1.4rem; font-style: normal; }
         .nav-btn.active { color: var(--gold); background: rgba(255,215,0,0.12); }
@@ -84,9 +91,13 @@
         .setting-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; }
         .setting-row input[type="number"], .setting-row select, .deposit-card input, .profile-card input { padding: 10px; border-radius: 10px; border: 1px solid #533483; background: #1e1e3f; color: #fff; text-align: center; width: 80px; }
         .setting-row input[type="range"] { width: 100%; margin: 5px 0; }
+        
         #matchProbSlider { accent-color: var(--gold); }
         #badMatchProbSlider { accent-color: var(--poison); }
-        
+        .status-badge { background: #3a3a5a; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 0.85rem; }
+        .status-badge.gold { color: var(--gold); border: 1px solid var(--gold); }
+        .status-badge.poison { color: var(--poison); border: 1px solid var(--poison); }
+
         .save-settings-btn, .deposit-card button, .profile-card button { background: linear-gradient(180deg, #f7971e, #ffd200); border: none; border-radius: 30px; padding: 12px; font-weight: 900; color: #2d1f54; cursor: pointer; box-shadow: 0 4px 0 #b45309; margin-top: 10px; }
         .logout-btn { background: #e11d48 !important; color: #fff !important; box-shadow: 0 4px 0 #9f1239 !important; }
         .history-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #333; }
@@ -150,19 +161,19 @@
                 <div class="settings-card">
                     <h2>⚙️ პარამეტრები</h2>
                     
-                    <!-- კარგი კალბასის შანსი -->
+                    <!-- კარგი კალბასის შანსი (0, დაბალი, ნორმალური, მაღალი, ძალიან მაღალი) -->
                     <div class="setting-row">
-                        <label>🎉 კარგი კალბასის შანსი (%):</label>
-                        <span id="matchPercentLabel">1%</span>
+                        <label>🎉 კარგი კალბასი:</label>
+                        <span id="matchPercentLabel" class="status-badge gold">ნორმალური</span>
                     </div>
-                    <input type="range" id="matchProbSlider" min="0" max="100" value="1" step="0.1">
+                    <input type="range" id="matchProbSlider" min="0" max="4" value="2" step="1">
 
                     <!-- ცუდი კალბასის შანსი -->
                     <div class="setting-row" style="margin-top: 10px;">
-                        <label style="color: var(--poison);">🤢 ცუდი კალბასის შანსი (%):</label>
-                        <span id="badMatchPercentLabel" style="color: var(--poison);">2%</span>
+                        <label style="color: var(--poison);">🤢 ცუდი კალბასი:</label>
+                        <span id="badMatchPercentLabel" class="status-badge poison">ნორმალური</span>
                     </div>
-                    <input type="range" id="badMatchProbSlider" min="0" max="100" value="2" step="0.1">
+                    <input type="range" id="badMatchProbSlider" min="0" max="4" value="2" step="1">
 
                     <hr style="border-color: #333; margin: 10px 0;">
 
@@ -230,7 +241,6 @@
     <!-- POISON ANTI-JACKPOT -->
     <div id="poisonOverlay" class="poison-overlay">
         <div class="poison-content">
-            <!-- აქ ჩასვი მოწამლული ანზორას სურათის ლინკი -->
             <img id="poisonRewardImg" class="poison-img" src="https://scontent.ftbs5-2.fna.fbcdn.net/v/t1.15752-9/734274844_1282934370313995_3470906076718388824_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=cKpm8SFyTIIQ7kNvwHL0CL1&_nc_oc=AdorW7Poddmk2dMfJOu_wj5vmggZgSVFAzTkmTaRWNcfjLYSJ8wBn8Pg7kMwceZp6GM&_nc_zt=23&_nc_ht=scontent.ftbs5-2.fna&_nc_ss=7b6a8&oh=03_Q7cD5wHrlNMl6yqXQGM5j8lLbgc9Pe7nb6jkhEFxi7jHFCG18Q&oe=6A6B751D" alt="Poisoned Anzora">
             <div style="color:var(--poison); font-size:2rem; font-weight:900;">ანზორა მოიწამლა</div>
             <div style="color:var(--poison);">-5,000,000 🪙</div>
@@ -240,8 +250,7 @@
 
     <!-- IMAGES (HIDDEN) -->
     <img id="kalbasiImage" src="Gemini_Generated_Image_mpa90pmpa90pmpa9-removebg-preview.png" style="display:none;" alt="Kalbasi">
-    <!-- აქ ჩასვი შენი ცუდი კალბასის სურათის ლინკი -->
-    <img id="badKalbasiImage" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Skull_and_crossbones.svg/1200px-Skull_and_crossbones.svg.png" style="display:none;" alt="Bad Kalbasi">
+    <img id="badKalbasiImage" src="cudi-kalbasi.png" style="display:none;" alt="Bad Kalbasi">
 
     <div id="notification" class="notification"></div>
 
@@ -314,6 +323,12 @@
                 playToneAtTime(ctx, 80, 'square', 2, 0.3, now + 0.5);
             }
 
+            function playClickSound() {
+                // მოკლე და მკაფიო "წკაპ" წაგებისას
+                playTone(1500, 'square', 0.02, 0.05); 
+                setTimeout(() => playTone(800, 'square', 0.02, 0.05), 20);
+            }
+
             // ---------- DYNAMIC SYMBOL HEIGHT ----------
             function getSymbolHeight() { return parseInt(getComputedStyle(document.documentElement).getPropertyValue('--symbol-h').trim()) || 90; }
             let SYMBOL_HEIGHT = getSymbolHeight();
@@ -324,10 +339,14 @@
             const EMOJIS = { coin: '🪙', attack: '⚔️', raid: '🍗', shield: '🛡️' };
             const BASE_LENGTH = 30; const REPEAT_COUNT = 10; const SPIN_COST = 100;
 
+            const DIFFICULTY_LEVELS = ["0", "დაბალი", "ნორმალური", "მაღალი", "ძალიან მაღალი"];
+            const PROB_VALUES_GOOD = [0, 0.5, 1, 3, 6]; // 0%, 0.5%, 1%, 3%, 6%
+            const PROB_VALUES_BAD = [0, 1, 2, 5, 10]; // 0%, 1%, 2%, 5%, 10%
+
             let user = { name: '', gold: 5000, attack: 0, raid: 0, shield: 0, totalSpins: 0, bigWins: 0, avatar: '' };
             let isSpinning = false; let reelsReady = 0; let currentOutcomes = [];
             let currentIndices = []; let spinHistory = [];
-            let settings = { matchPercent: 1, badMatchPercent: 2, reelCount: 5, coinReward: 2000, attackReward: 3, raidReward: 3, shieldReward: 2 };
+            let settings = { matchLvl: 2, badMatchLvl: 2, reelCount: 5, coinReward: 2000, attackReward: 3, raidReward: 3, shieldReward: 2 };
             let baseStrips = []; let stripsElements = []; let spinTimer = null;
 
             // DOM
@@ -335,14 +354,15 @@
             const goldSpan = document.getElementById('goldCount'); const spinBtn = document.getElementById('spinButton');
             const slotMachineDiv = document.getElementById('slotMachine'); const notification = document.getElementById('notification');
             const matchProbSlider = document.getElementById('matchProbSlider'); const badMatchProbSlider = document.getElementById('badMatchProbSlider');
+            const matchLabel = document.getElementById('matchPercentLabel'); const badMatchLabel = document.getElementById('badMatchPercentLabel');
             const kalbasiRewardOverlay = document.getElementById('kalbasiRewardOverlay'); const poisonOverlay = document.getElementById('poisonOverlay');
             const kalbasiImg = document.getElementById('kalbasiImage'); const badKalbasiImg = document.getElementById('badKalbasiImage');
             const navButtons = document.querySelectorAll('.nav-btn');
             const pages = { home: document.getElementById('homePage'), settings: document.getElementById('settingsPage'), deposit: document.getElementById('depositPage'), history: document.getElementById('historyPage'), profile: document.getElementById('profilePage') };
 
             // Update sliders text
-            matchProbSlider.addEventListener('input', (e) => document.getElementById('matchPercentLabel').textContent = e.target.value + '%');
-            badMatchProbSlider.addEventListener('input', (e) => document.getElementById('badMatchPercentLabel').textContent = e.target.value + '%');
+            matchProbSlider.addEventListener('input', (e) => matchLabel.textContent = DIFFICULTY_LEVELS[e.target.value]);
+            badMatchProbSlider.addEventListener('input', (e) => badMatchLabel.textContent = DIFFICULTY_LEVELS[e.target.value]);
 
             function showNotification(text, duration = 1500, isBad = false) {
                 notification.textContent = text; 
@@ -386,34 +406,20 @@
                 }
             }
 
-            // ===== PROFILE PICTURE UPLOAD LOGIC =====
             const avatarUpload = document.getElementById('avatarUpload');
             document.getElementById('changeAvatarBtn').addEventListener('click', () => avatarUpload.click());
-
             avatarUpload.addEventListener('change', function() {
                 const file = this.files[0];
                 if (file) {
                     const reader = new FileReader();
-                    reader.onload = function(e) {
-                        user.avatar = e.target.result;
-                        saveUser();
-                        updateAvatarDisplay();
-                        showNotification('✅ ფოტო განახლდა');
-                    }
+                    reader.onload = function(e) { user.avatar = e.target.result; saveUser(); updateAvatarDisplay(); showNotification('✅ ფოტო განახლდა'); }
                     reader.readAsDataURL(file);
                 }
             });
 
-            // ===== USERNAME CHANGE LOGIC =====
             document.getElementById('changeUsernameBtn').addEventListener('click', () => {
                 const newName = document.getElementById('newUsernameInput').value.trim();
-                if (newName) {
-                    user.name = newName;
-                    saveUser();
-                    document.getElementById('profileUsername').textContent = user.name;
-                    document.getElementById('newUsernameInput').value = '';
-                    showNotification('✅ სახელი შეიცვალა');
-                }
+                if (newName) { user.name = newName; saveUser(); document.getElementById('profileUsername').textContent = user.name; document.getElementById('newUsernameInput').value = ''; showNotification('✅ სახელი შეიცვალა'); }
             });
 
             document.getElementById('loginBtn').addEventListener('click', () => {
@@ -427,15 +433,17 @@
                 spinHistory = JSON.parse(localStorage.getItem('anzora_history') || '[]'); 
                 let savedSettings = JSON.parse(localStorage.getItem('anzora_settings') || '{}');
                 settings = { ...settings, ...savedSettings };
-                matchProbSlider.value = settings.matchPercent; document.getElementById('matchPercentLabel').textContent = settings.matchPercent + '%';
-                badMatchProbSlider.value = settings.badMatchPercent; document.getElementById('badMatchPercentLabel').textContent = settings.badMatchPercent + '%';
+                
+                // Initialize Sliders
+                matchProbSlider.value = settings.matchLvl ?? 2; matchLabel.textContent = DIFFICULTY_LEVELS[settings.matchLvl ?? 2];
+                badMatchProbSlider.value = settings.badMatchLvl ?? 2; badMatchLabel.textContent = DIFFICULTY_LEVELS[settings.badMatchLvl ?? 2];
                 
                 loginScreen.classList.add('hidden'); appDiv.classList.add('active'); updateAllStatsDisplay(); updateAvatarDisplay(); rebuildSlotMachine(); navigateTo('home');
             } else { loginScreen.classList.remove('hidden'); appDiv.classList.remove('active'); }
 
             document.getElementById('saveSettingsBtn').addEventListener('click', () => {
-                settings.matchPercent = parseFloat(matchProbSlider.value);
-                settings.badMatchPercent = parseFloat(badMatchProbSlider.value);
+                settings.matchLvl = parseInt(matchProbSlider.value);
+                settings.badMatchLvl = parseInt(badMatchProbSlider.value);
                 settings.reelCount = parseInt(document.getElementById('reelCountInput').value);
                 settings.coinReward = parseInt(document.getElementById('coinReward').value);
                 saveUser(); rebuildSlotMachine(); showNotification('✅ შენახულია');
@@ -478,25 +486,17 @@
                 
                 const isFullMatch = currentOutcomes.every(s => s === currentOutcomes[0]);
                 const badCount = currentOutcomes.filter(s => s === 'badkalbasi').length;
-                let isWin = false;
-                let isPoison = false;
+                let isWin = false; let isPoison = false;
 
                 if (badCount === settings.reelCount) {
-                    // ANTI-JACKPOT (ყველა კუბიკი ცუდი კალბასია)
-                    user.gold -= 5000000;
-                    if(user.gold < 0) user.gold = 0;
-                    poisonOverlay.classList.add('active');
-                    playPoisonSound();
-                    isPoison = true;
+                    user.gold -= 5000000; if(user.gold < 0) user.gold = 0;
+                    poisonOverlay.classList.add('active'); playPoisonSound(); isPoison = true;
                 } else if (badCount > 0) {
-                    // ნაწილობრივი მოწამვლა, აჩვენებს მხოლოდ დაკლებულ რიცხვს
                     const penalty = badCount * 300;
-                    user.gold -= penalty;
-                    if(user.gold < 0) user.gold = 0;
+                    user.gold -= penalty; if(user.gold < 0) user.gold = 0;
                     showNotification(`-${penalty} 🪙`, 2000, true);
-                    playTone(150, 'sawtooth', 0.5, 0.2);
+                    playClickSound(); // უსიამოვნო ხმის მაგივრად წკაპუნი
                 } else if (isFullMatch) {
-                    // მოგება
                     isWin = true;
                     if (currentOutcomes[0] === 'coin') { user.gold += settings.coinReward; showNotification(`+${settings.coinReward} 🪙`); playWinSound(); }
                     else if (currentOutcomes[0] === 'kalbasi') { user.gold += 10000000; kalbasiRewardOverlay.classList.add('active'); playJackpotSound(); }
@@ -516,8 +516,12 @@
                 
                 startSpinAudio();
 
-                const probGood = Math.pow(parseFloat(matchProbSlider.value || 1) / 100, 1 / settings.reelCount);
-                const probBad = Math.pow(parseFloat(badMatchProbSlider.value || 1) / 100, 1 / settings.reelCount);
+                const goodLvl = settings.matchLvl ?? 2;
+                const badLvl = settings.badMatchLvl ?? 2;
+                
+                // ვიღებთ პროცენტს და ვყოფთ კუბიკების რაოდენობაზე (ფორმულა)
+                let probGood = PROB_VALUES_GOOD[goodLvl] === 0 ? 0 : Math.pow(PROB_VALUES_GOOD[goodLvl] / 100, 1 / settings.reelCount);
+                let probBad = PROB_VALUES_BAD[badLvl] === 0 ? 0 : Math.pow(PROB_VALUES_BAD[badLvl] / 100, 1 / settings.reelCount);
 
                 for (let i = 0; i < settings.reelCount; i++) {
                     const r = Math.random();
