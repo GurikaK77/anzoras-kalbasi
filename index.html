@@ -6,294 +6,88 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="icon" type="image/png" href="https://scontent.ftbs5-2.fna.fbcdn.net/v/t1.15752-9/734274844_1282934370313995_3470906076718388824_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=cKpm8SFyTIIQ7kNvwHL0CL1&_nc_oc=AdorW7Poddmk2dMfJOu_wj5vmggZgSVFAzTkmTaRWNcfjLYSJ8wBn8Pg7kMwceZp6GM&_nc_zt=23&_nc_ht=scontent.ftbs5-2.fna&_nc_ss=7baaf&oh=03_Q7cD5wGHG0xkNw6JHm9yY76apF1L9xfY7vD1xFrPKAoSH5W8cQ&oe=6A6C1DDD">
- <link rel="apple-touch-icon" href="https://scontent.ftbs5-2.fna.fbcdn.net/v/t1.15752-9/734274844_1282934370313995_3470906076718388824_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=cKpm8SFyTIIQ7kNvwHL0CL1&_nc_oc=AdorW7Poddmk2dMfJOu_wj5vmggZgSVFAzTkmTaRWNcfjLYSJ8wBn8Pg7kMwceZp6GM&_nc_zt=23&_nc_ht=scontent.ftbs5-2.fna&_nc_ss=7baaf&oh=03_Q7cD5wGHG0xkNw6JHm9yY76apF1L9xfY7vD1xFrPKAoSH5W8cQ&oe=6A6C1DDD">
-    <title>ANZORAS KALBASI | Mission: Play</title>
+    <link rel="apple-touch-icon" href="https://scontent.ftbs5-2.fna.fbcdn.net/v/t1.15752-9/734274844_1282934370313995_3470906076718388824_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=cKpm8SFyTIIQ7kNvwHL0CL1&_nc_oc=AdorW7Poddmk2dMfJOu_wj5vmggZgSVFAzTkmTaRWNcfjLYSJ8wBn8Pg7kMwceZp6GM&_nc_zt=23&_nc_ht=scontent.ftbs5-2.fna&_nc_ss=7baaf&oh=03_Q7cD5wGHG0xkNw6JHm9yY76apF1L9xfY7vD1xFrPKAoSH5W8cQ&oe=6A6C1DDD">
+    <title>ANZORAS KALBASI</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
 
         :root {
             --gold: #FFD700;
+            --poison: #ff4d4d;
             --bg: #1a1a2e;
             --card: #16213e;
             --symbol-h: 90px;
             --spin-cost: 100;
             --safe-top: env(safe-area-inset-top, 0px);
-            --safe-bottom: env(safe-area-inset-bottom, 20px); /* 20px fallback-ისთვის */
+            --safe-bottom: env(safe-area-inset-bottom, 20px);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         html, body {
-            width: 100%;
-            height: 100%;
-            height: 100dvh;
-            margin: 0;
-            padding: 0;
+            width: 100%; height: 100%; height: 100dvh; margin: 0; padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            user-select: none;
-            touch-action: manipulation;
-            color: #fff;
-            overflow: hidden;
-            background: #1a1a2e;
+            user-select: none; touch-action: manipulation; color: #fff; overflow: hidden; background: #1a1a2e;
         }
 
-        body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle at 50% 30%, #2d1f54 0%, #1a1a2e 70%, #0d0d1a 100%);
-        }
+        body { display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 50% 30%, #2d1f54 0%, #1a1a2e 70%, #0d0d1a 100%); }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            height: var(--safe-top);
-            background: #1a1a2e;
-            z-index: 9999;
-            pointer-events: none;
-        }
+        body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: var(--safe-top); background: #1a1a2e; z-index: 9999; pointer-events: none; }
 
         /* ===== LOGIN SCREEN ===== */
-        .login-screen {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            padding-top: var(--safe-top);
-            padding-bottom: var(--safe-bottom);
-        }
-        .login-box {
-            background: var(--card);
-            border: 2px solid var(--gold);
-            border-radius: 30px;
-            padding: 40px 30px;
-            text-align: center;
-            max-width: 350px;
-            width: 90%;
-            box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
-        }
-        .login-box h2 {
-            font-family: 'Lobster', cursive;
-            color: var(--gold);
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-        .login-box input {
-            width: 100%;
-            padding: 14px 20px;
-            border-radius: 30px;
-            border: none;
-            background: #1e1e3f;
-            color: #fff;
-            font-size: 1rem;
-            margin: 12px 0;
-            outline: none;
-            border: 1px solid #533483;
-        }
-        .login-box button {
-            background: linear-gradient(180deg, #f7971e, #ffd200);
-            border: none;
-            border-radius: 30px;
-            padding: 14px 40px;
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: #2d1f54;
-            cursor: pointer;
-            box-shadow: 0 6px 0 #b45309;
-            transition: all 0.1s;
-        }
+        .login-screen { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); display: flex; align-items: center; justify-content: center; z-index: 9999; padding-top: var(--safe-top); padding-bottom: var(--safe-bottom); }
+        .login-box { background: var(--card); border: 2px solid var(--gold); border-radius: 30px; padding: 40px 30px; text-align: center; max-width: 350px; width: 90%; box-shadow: 0 0 40px rgba(255, 215, 0, 0.5); }
+        .login-box h2 { font-family: 'Lobster', cursive; color: var(--gold); font-size: 2.5rem; margin-bottom: 20px; }
+        .login-box input { width: 100%; padding: 14px 20px; border-radius: 30px; border: none; background: #1e1e3f; color: #fff; font-size: 1rem; margin: 12px 0; outline: none; border: 1px solid #533483; }
+        .login-box button { background: linear-gradient(180deg, #f7971e, #ffd200); border: none; border-radius: 30px; padding: 14px 40px; font-size: 1.2rem; font-weight: 900; color: #2d1f54; cursor: pointer; box-shadow: 0 6px 0 #b45309; transition: all 0.1s; }
         .login-box button:active { transform: translateY(4px); box-shadow: 0 2px 0 #b45309; }
 
         /* ===== MAIN APP ===== */
-        .app {
-            width: 100%;
-            max-width: 700px;
-            height: 100%;
-            height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            display: none;
-        }
+        .app { width: 100%; max-width: 700px; height: 100%; height: 100dvh; display: flex; flex-direction: column; position: relative; display: none; }
         .app.active { display: flex; }
         .login-screen.hidden { display: none; }
 
-        .pages {
-            flex: 1;
-            overflow-y: auto;
-            /* Bottom padding დატოვებულია ისე რო კონტენტი არ დაიმალოს */
-            padding: calc(var(--safe-top) + 10px) 12px calc(80px + var(--safe-bottom)) 12px;
-            display: flex;
-            flex-direction: column;
-            -webkit-overflow-scrolling: touch;
-        }
-
+        .pages { flex: 1; overflow-y: auto; padding: calc(var(--safe-top) + 10px) 12px calc(80px + var(--safe-bottom)) 12px; display: flex; flex-direction: column; -webkit-overflow-scrolling: touch; }
         .page { display: none; flex-direction: column; gap: 14px; }
         .page.active { display: flex; }
 
         /* ===== FIX: IPHONE NAV BAR ===== */
-        .bottom-nav {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(14, 14, 28, 0.98);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    display: flex;
-    justify-content: space-evenly;
-    align-items: flex-end;   /* ← იცვლება flex-start → flex-end */
-    height: 65px;            /* ← მხოლოდ 65px, safe-bottom მოშორებული */
-    padding-top: 5px;
-    padding-bottom: 0;       /* ← safe-bottom–ის padding–იც 0 */
-    border-top: 1px solid rgba(255, 215, 0, 0.25);
-    z-index: 100;
-    box-shadow: 0 -5px 25px rgba(0,0,0,0.6);
-}
-        
-        .nav-btn {
-            background: transparent;
-            border: none;
-            color: #aaa;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 2px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            cursor: pointer;
-            padding: 8px 4px;
-            border-radius: 16px;
-            transition: 0.2s;
-            flex: 1;
-            max-width: 75px;
-            height: 55px; /* ფიქსირებული სიმაღლე ღილაკებისთვის */
-        }
+        .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(14, 14, 28, 0.98); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); display: flex; justify-content: space-evenly; align-items: flex-end; height: 65px; padding-top: 5px; padding-bottom: 0; border-top: 1px solid rgba(255, 215, 0, 0.25); z-index: 100; box-shadow: 0 -5px 25px rgba(0,0,0,0.6); }
+        .nav-btn { background: transparent; border: none; color: #aaa; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 0.7rem; font-weight: 600; cursor: pointer; padding: 8px 4px; border-radius: 16px; transition: 0.2s; flex: 1; max-width: 75px; height: 55px; }
         .nav-btn i { font-size: 1.4rem; font-style: normal; }
         .nav-btn.active { color: var(--gold); background: rgba(255,215,0,0.12); }
         
-        .nav-btn.home-btn {
-            background: rgba(255, 215, 0, 0.15);
-            color: var(--gold);
-            font-size: 0.85rem;
-            font-weight: 900;
-            border-radius: 40px;
-            max-width: 85px;
-            flex: 1.2;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-        }
+        .nav-btn.home-btn { background: rgba(255, 215, 0, 0.15); color: var(--gold); font-size: 0.85rem; font-weight: 900; border-radius: 40px; max-width: 85px; flex: 1.2; border: 1px solid rgba(255, 215, 0, 0.3); }
         .nav-btn.home-btn i { font-size: 1.6rem; }
-        .nav-btn.home-btn.active { 
-            background: var(--gold); 
-            color: #1a1a2e;
-            box-shadow: 0 4px 15px rgba(255,215,0,0.5);
-            border: none;
-        }
+        .nav-btn.home-btn.active { background: var(--gold); color: #1a1a2e; box-shadow: 0 4px 15px rgba(255,215,0,0.5); border: none; }
 
         /* ===== SLOT MACHINE ===== */
-        .game-title {
-            font-family: 'Lobster', cursive;
-            font-size: 2.2rem;
-            color: var(--gold);
-            text-shadow: 0 0 20px #FFD700, 0 4px 8px rgba(0,0,0,0.5);
-            text-align: center;
-            line-height: 1.2;
-            margin-bottom: 4px;
-        }
-        .stats-bar {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-            background: var(--card);
-            border-radius: 20px;
-            padding: 10px 14px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-            width: 100%;
-        }
+        .game-title { font-family: 'Lobster', cursive; font-size: 2.2rem; color: var(--gold); text-shadow: 0 0 20px #FFD700, 0 4px 8px rgba(0,0,0,0.5); text-align: center; line-height: 1.2; margin-bottom: 4px; }
+        .stats-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; background: var(--card); border-radius: 20px; padding: 10px 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); width: 100%; }
         .stat { display: flex; align-items: center; gap: 4px; color: #fff; font-weight: bold; font-size: 0.8rem; }
         .stat.gold { color: var(--gold); font-size: 1rem; }
         .stat span { background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 20px; min-width: 40px; text-align: center; }
         
-        .slot-machine {
-            display: flex;
-            justify-content: center;
-            gap: 6px;
-            background: #0f3460;
-            padding: 16px 12px;
-            border-radius: 24px;
-            box-shadow: 0 12px 36px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.2);
-            border: 3px solid #533483;
-            width: 100%;
-            margin: 0 auto;
-            overflow: hidden;
-        }
-        .reel-container {
-            flex: 1;
-            min-width: 45px;
-            max-width: 80px;
-            height: var(--symbol-h);
-            background: #1e1e3f;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 0 0 0 2px #7b2cbf;
-            position: relative;
-        }
+        .slot-machine { display: flex; justify-content: center; gap: 6px; background: #0f3460; padding: 16px 12px; border-radius: 24px; box-shadow: 0 12px 36px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.2); border: 3px solid #533483; width: 100%; margin: 0 auto; overflow: hidden; }
+        .reel-container { flex: 1; min-width: 45px; max-width: 80px; height: var(--symbol-h); background: #1e1e3f; border-radius: 12px; overflow: hidden; box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 0 0 0 2px #7b2cbf; position: relative; }
         .reel-strip { position: absolute; width: 100%; top: 0; left: 0; will-change: transform; }
-        .symbol {
-            width: 100%;
-            height: var(--symbol-h);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: clamp(24px, 5vw, 42px);
-            color: #fff;
-            line-height: 1;
-        }
+        .symbol { width: 100%; height: var(--symbol-h); display: flex; align-items: center; justify-content: center; font-size: clamp(24px, 5vw, 42px); color: #fff; line-height: 1; }
         .symbol img { width: 80%; height: 80%; object-fit: contain; border-radius: 8px; }
         
-        .spin-btn {
-            background: linear-gradient(180deg, #f7971e 0%, #ffd200 100%);
-            border: none;
-            border-radius: 50px;
-            padding: 16px 40px;
-            font-size: 1.4rem;
-            font-weight: 900;
-            color: #2d1f54;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            box-shadow: 0 8px 0 #b45309, 0 12px 28px rgba(255,215,0,0.4);
-            transition: all 0.1s ease;
-            outline: none;
-            width: 100%;
-            margin-top: 8px;
-        }
+        .spin-btn { background: linear-gradient(180deg, #f7971e 0%, #ffd200 100%); border: none; border-radius: 50px; padding: 16px 40px; font-size: 1.4rem; font-weight: 900; color: #2d1f54; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; box-shadow: 0 8px 0 #b45309, 0 12px 28px rgba(255,215,0,0.4); transition: all 0.1s ease; outline: none; width: 100%; margin-top: 8px; }
         .spin-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 #b45309; }
         .spin-btn:disabled { opacity: 0.6; transform: translateY(4px); pointer-events: none; }
 
-        /* ===== SETTINGS, DEPOSIT & OTHER PAGES (Omitted unchanged CSS for brevity, keeping all existing rules) ===== */
-        .settings-card, .deposit-card, .profile-card, .history-list {
-            background: var(--card);
-            border-radius: 25px;
-            padding: 25px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-            display: flex; flex-direction: column; gap: 16px; text-align: center;
-        }
+        /* ===== SETTINGS, DEPOSIT & OTHER PAGES ===== */
+        .settings-card, .deposit-card, .profile-card, .history-list { background: var(--card); border-radius: 25px; padding: 25px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 16px; text-align: center; }
         .settings-card h2, .deposit-card h3, .profile-card h2 { color: var(--gold); font-size: 1.8rem; font-family: 'Lobster', cursive; margin-bottom: 10px; }
         .setting-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; }
-        .setting-row input, .setting-row select, .deposit-card input, .profile-card input {
-            padding: 10px; border-radius: 10px; border: 1px solid #533483; background: #1e1e3f; color: #fff; text-align: center;
-        }
-        .setting-row input[type="range"] { width: 100%; accent-color: var(--gold); margin: 5px 0; }
-        .save-settings-btn, .deposit-card button, .profile-card button {
-            background: linear-gradient(180deg, #f7971e, #ffd200); border: none; border-radius: 30px; padding: 12px; font-weight: 900; color: #2d1f54; cursor: pointer; box-shadow: 0 4px 0 #b45309; margin-top: 10px;
-        }
+        .setting-row input[type="number"], .setting-row select, .deposit-card input, .profile-card input { padding: 10px; border-radius: 10px; border: 1px solid #533483; background: #1e1e3f; color: #fff; text-align: center; width: 80px; }
+        .setting-row input[type="range"] { width: 100%; margin: 5px 0; }
+        #matchProbSlider { accent-color: var(--gold); }
+        #badMatchProbSlider { accent-color: var(--poison); }
+        
+        .save-settings-btn, .deposit-card button, .profile-card button { background: linear-gradient(180deg, #f7971e, #ffd200); border: none; border-radius: 30px; padding: 12px; font-weight: 900; color: #2d1f54; cursor: pointer; box-shadow: 0 4px 0 #b45309; margin-top: 10px; }
         .logout-btn { background: #e11d48 !important; color: #fff !important; box-shadow: 0 4px 0 #9f1239 !important; }
         .history-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #333; }
         .history-win { color: #4ade80; font-weight: bold; }
@@ -301,14 +95,23 @@
         .profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--gold); margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; overflow: hidden; }
         .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
+        /* JACKPOT OVERLAY */
         .kalbasi-reward-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); z-index: 2000; display: flex; align-items: center; justify-content: center; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
         .kalbasi-reward-overlay.active { opacity: 1; pointer-events: auto; }
         .kalbasi-reward-content { background: #1a1a2e; border: 4px solid var(--gold); border-radius: 30px; padding: 30px; text-align: center; box-shadow: 0 0 60px rgba(255, 215, 0, 0.7); }
         .kalbasi-reward-img { max-width: 200px; max-height: 200px; border-radius: 20px; margin-bottom: 20px; }
         .kalbasi-reward-close { margin-top: 20px; background: var(--gold); color: #000; border: none; padding: 10px 30px; border-radius: 25px; font-weight: bold; cursor: pointer; }
 
+        /* POISON OVERLAY (ANTI-JACKPOT) */
+        .poison-overlay { position: fixed; inset: 0; background: rgba(30, 0, 0, 0.95); z-index: 2000; display: flex; align-items: center; justify-content: center; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        .poison-overlay.active { opacity: 1; pointer-events: auto; }
+        .poison-content { background: #1a0505; border: 4px solid var(--poison); border-radius: 30px; padding: 30px; text-align: center; box-shadow: 0 0 60px rgba(255, 0, 0, 0.7); }
+        .poison-img { max-width: 200px; max-height: 200px; border-radius: 20px; margin-bottom: 20px; filter: grayscale(50%) sepia(100%) hue-rotate(300deg) saturate(300%); }
+        .poison-close { margin-top: 20px; background: var(--poison); color: #fff; border: none; padding: 10px 30px; border-radius: 25px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 0 #990000; }
+
         .notification { position: fixed; bottom: calc(85px + var(--safe-bottom)); left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); border: 1px solid var(--gold); color: var(--gold); padding: 12px 24px; border-radius: 30px; font-weight: bold; z-index: 1500; opacity: 0; transition: opacity 0.3s; pointer-events: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         .notification.show { opacity: 1; }
+        .notification.bad { border-color: var(--poison); color: var(--poison); }
 
         #homePage { flex: 1; display: none; flex-direction: column; justify-content: center; align-items: center; gap: 12px; }
         #homePage.active { display: flex; }
@@ -346,11 +149,23 @@
             <div id="settingsPage" class="page">
                 <div class="settings-card">
                     <h2>⚙️ პარამეტრები</h2>
+                    
+                    <!-- კარგი კალბასის შანსი -->
                     <div class="setting-row">
-                        <label>🎯 3 კალბასის შანსი (%):</label>
+                        <label>🎉 კარგი კალბასის შანსი (%):</label>
                         <span id="matchPercentLabel">1%</span>
                     </div>
                     <input type="range" id="matchProbSlider" min="0" max="100" value="1" step="0.1">
+
+                    <!-- ცუდი კალბასის შანსი -->
+                    <div class="setting-row" style="margin-top: 10px;">
+                        <label style="color: var(--poison);">🤢 ცუდი კალბასის შანსი (%):</label>
+                        <span id="badMatchPercentLabel" style="color: var(--poison);">2%</span>
+                    </div>
+                    <input type="range" id="badMatchProbSlider" min="0" max="100" value="2" step="0.1">
+
+                    <hr style="border-color: #333; margin: 10px 0;">
+
                     <div class="setting-row"><label>🎰 კუბიკები:</label><input type="number" id="reelCountInput" value="5" min="1" max="10"></div>
                     <div class="setting-row"><label>🪙 მონეტა:</label><input type="number" id="coinReward" value="2000" step="100"></div>
                     <div class="setting-row"><label>⚔️ შეტევა:</label><input type="number" id="attackReward" value="3"></div>
@@ -392,7 +207,6 @@
             </div>
         </div>
 
-        <!-- FIX: BOTTOM NAVIGATION -->
         <div class="bottom-nav">
             <button class="nav-btn" data-page="deposit"><i>💰</i><span>შეტანა</span></button>
             <button class="nav-btn" data-page="history"><i>📜</i><span>ისტორია</span></button>
@@ -411,14 +225,28 @@
             <button id="kalbasiRewardClose" class="kalbasi-reward-close">გაგრძელება</button>
         </div>
     </div>
-    <!-- <img id="kalbasiImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSISBz8OJdNm51jFquBqghscObQXgQcvj4fNXsl7xnxMw&s=10" style="display:none;" alt="Kalbasi"> -->
+
+    <!-- POISON ANTI-JACKPOT -->
+    <div id="poisonOverlay" class="poison-overlay">
+        <div class="poison-content">
+            <!-- აქ ჩასვი მოწამლული ანზორას სურათის ლინკი -->
+            <img id="poisonRewardImg" class="poison-img" src="https://scontent.ftbs5-2.fna.fbcdn.net/v/t1.15752-9/734274844_1282934370313995_3470906076718388824_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=cKpm8SFyTIIQ7kNvwHL0CL1&_nc_oc=AdorW7Poddmk2dMfJOu_wj5vmggZgSVFAzTkmTaRWNcfjLYSJ8wBn8Pg7kMwceZp6GM&_nc_zt=23&_nc_ht=scontent.ftbs5-2.fna&_nc_ss=7b6a8&oh=03_Q7cD5wHrlNMl6yqXQGM5j8lLbgc9Pe7nb6jkhEFxi7jHFCG18Q&oe=6A6B751D" alt="Poisoned Anzora">
+            <div style="color:var(--poison); font-size:2rem; font-weight:900;">ანზორა მოიწამლა</div>
+            <div style="color:var(--poison);">-5,000,000 🪙</div>
+            <button id="poisonClose" class="poison-close">გადარჩენა</button>
+        </div>
+    </div>
+
+    <!-- IMAGES (HIDDEN) -->
     <img id="kalbasiImage" src="Gemini_Generated_Image_mpa90pmpa90pmpa9-removebg-preview.png" style="display:none;" alt="Kalbasi">
+    <!-- აქ ჩასვი შენი ცუდი კალბასის სურათის ლინკი -->
+    <img id="badKalbasiImage" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Skull_and_crossbones.svg/1200px-Skull_and_crossbones.svg.png" style="display:none;" alt="Bad Kalbasi">
 
     <div id="notification" class="notification"></div>
 
     <script>
         (function() {
-            // ---------- CASINO CASHOUT AUDIO (WEB AUDIO API) - "MONEY FEELING" ----------
+            // ---------- AUDIO ----------
             const AudioCtx = window.AudioContext || window.webkitAudioContext;
             let audioCtx = null;
             let spinAudioInterval = null;
@@ -429,7 +257,6 @@
                 return audioCtx;
             }
 
-            // ფუნქცია რომელიც ხმას კონკრეტულ დროზე უკრავს (ზუსტი მელოდიებისთვის)
             function playToneAtTime(ctx, freq, type, duration, vol, startTime) {
                 try {
                     const osc = ctx.createOscillator();
@@ -450,119 +277,168 @@
                 playToneAtTime(ctx, freq, type, duration, vol, ctx.currentTime);
             }
 
-            // 1. მექანიკური მეტალის წკრიალი სპინის დროს (Coins / Gears)
             function startSpinAudio() {
                 if (spinAudioInterval) clearInterval(spinAudioInterval);
                 spinAudioInterval = setInterval(() => {
-                    if (!isSpinning) {
-                        clearInterval(spinAudioInterval);
-                        return;
-                    }
-                    // სწრაფი, მაღალი მეტალური კლიკი
+                    if (!isSpinning) { clearInterval(spinAudioInterval); return; }
                     playTone(1300 + Math.random() * 300, 'triangle', 0.03, 0.04); 
-                    // დაბალი მექანიკური კლიკი
                     setTimeout(() => playTone(500, 'square', 0.02, 0.02), 20);
                 }, 80);
             }
 
-            // 2. მძიმე გაჩერების ხმა კუბიკის ჩაჯდომისას
             function playReelStop() { 
                 playTone(150, 'square', 0.1, 0.1); 
                 setTimeout(() => playTone(80, 'triangle', 0.1, 0.15), 15);
             }
 
-            // 3. კლასიკური ვეგასის მოგების ზარები (Bells Ringing)
             function playWinSound() {
-                const ctx = ensureAudio();
-                let now = ctx.currentTime;
-                // ზარების სწრაფი რეკვა (3 არპეჯიო)
+                const ctx = ensureAudio(); let now = ctx.currentTime;
                 for(let i = 0; i < 12; i++) {
                     let time = now + (i * 0.1);
-                    playToneAtTime(ctx, 987.77, 'sine', 0.4, 0.1, time);        // B5
-                    playToneAtTime(ctx, 1318.51, 'triangle', 0.3, 0.05, time);  // E6
+                    playToneAtTime(ctx, 987.77, 'sine', 0.4, 0.1, time);
+                    playToneAtTime(ctx, 1318.51, 'triangle', 0.3, 0.05, time);
                 }
             }
 
-            // 4. ჯეკპოტის ხმა
             function playJackpotSound() {
-                const ctx = ensureAudio();
-                let now = ctx.currentTime;
-                // გამარჯვების საყვირი
+                const ctx = ensureAudio(); let now = ctx.currentTime;
                 const fanfare = [523.25, 523.25, 523.25, 659.25, 587.33, 659.25, 783.99, 1046.50];
-                fanfare.forEach((freq, i) => {
-                    playToneAtTime(ctx, freq, 'square', 0.4, 0.08, now + (i * 0.15));
-                });
-                
-                // ფულის ჩამოყრის ხანგრძლივი ხმა
-                for (let j = 0; j < 40; j++) {
-                    playToneAtTime(ctx, 1000 + Math.random() * 500, 'triangle', 0.1, 0.05, now + 0.5 + (j * 0.08));
-                }
+                fanfare.forEach((freq, i) => playToneAtTime(ctx, freq, 'square', 0.4, 0.08, now + (i * 0.15)));
+                for (let j = 0; j < 40; j++) playToneAtTime(ctx, 1000 + Math.random() * 500, 'triangle', 0.1, 0.05, now + 0.5 + (j * 0.08));
+            }
+
+            function playPoisonSound() {
+                const ctx = ensureAudio(); let now = ctx.currentTime;
+                playToneAtTime(ctx, 100, 'sawtooth', 2, 0.3, now);
+                playToneAtTime(ctx, 80, 'square', 2, 0.3, now + 0.5);
             }
 
             // ---------- DYNAMIC SYMBOL HEIGHT ----------
-            function getSymbolHeight() {
-                const h = getComputedStyle(document.documentElement).getPropertyValue('--symbol-h').trim();
-                return parseInt(h) || 90;
-            }
+            function getSymbolHeight() { return parseInt(getComputedStyle(document.documentElement).getPropertyValue('--symbol-h').trim()) || 90; }
             let SYMBOL_HEIGHT = getSymbolHeight();
-            window.addEventListener('resize', () => {
-                const newH = getSymbolHeight();
-                if (newH !== SYMBOL_HEIGHT) { SYMBOL_HEIGHT = newH; rebuildSlotMachine(); }
-            });
+            window.addEventListener('resize', () => { const newH = getSymbolHeight(); if (newH !== SYMBOL_HEIGHT) { SYMBOL_HEIGHT = newH; rebuildSlotMachine(); } });
 
             // ---------- GAME STATE ----------
-            const SYMBOLS = ['coin', 'attack', 'raid', 'shield', 'kalbasi'];
+            const SYMBOLS = ['coin', 'attack', 'raid', 'shield', 'kalbasi', 'badkalbasi'];
             const EMOJIS = { coin: '🪙', attack: '⚔️', raid: '🍗', shield: '🛡️' };
             const BASE_LENGTH = 30; const REPEAT_COUNT = 10; const SPIN_COST = 100;
 
             let user = { name: '', gold: 5000, attack: 0, raid: 0, shield: 0, totalSpins: 0, bigWins: 0, avatar: '' };
             let isSpinning = false; let reelsReady = 0; let currentOutcomes = [];
-            let perReelKalbasiProb = 0.2; let currentIndices = []; let spinHistory = [];
-            let settings = { matchPercent: 1, reelCount: 5, coinReward: 2000, attackReward: 3, raidReward: 3, shieldReward: 2 };
+            let currentIndices = []; let spinHistory = [];
+            let settings = { matchPercent: 1, badMatchPercent: 2, reelCount: 5, coinReward: 2000, attackReward: 3, raidReward: 3, shieldReward: 2 };
             let baseStrips = []; let stripsElements = []; let spinTimer = null;
 
             // DOM
             const loginScreen = document.getElementById('loginScreen'); const appDiv = document.getElementById('app');
             const goldSpan = document.getElementById('goldCount'); const spinBtn = document.getElementById('spinButton');
             const slotMachineDiv = document.getElementById('slotMachine'); const notification = document.getElementById('notification');
-            const matchProbSlider = document.getElementById('matchProbSlider'); const kalbasiRewardOverlay = document.getElementById('kalbasiRewardOverlay');
-            const kalbasiImg = document.getElementById('kalbasiImage'); const navButtons = document.querySelectorAll('.nav-btn');
+            const matchProbSlider = document.getElementById('matchProbSlider'); const badMatchProbSlider = document.getElementById('badMatchProbSlider');
+            const kalbasiRewardOverlay = document.getElementById('kalbasiRewardOverlay'); const poisonOverlay = document.getElementById('poisonOverlay');
+            const kalbasiImg = document.getElementById('kalbasiImage'); const badKalbasiImg = document.getElementById('badKalbasiImage');
+            const navButtons = document.querySelectorAll('.nav-btn');
             const pages = { home: document.getElementById('homePage'), settings: document.getElementById('settingsPage'), deposit: document.getElementById('depositPage'), history: document.getElementById('historyPage'), profile: document.getElementById('profilePage') };
 
-            function showNotification(text, duration = 1500) {
-                notification.textContent = text; notification.classList.add('show');
+            // Update sliders text
+            matchProbSlider.addEventListener('input', (e) => document.getElementById('matchPercentLabel').textContent = e.target.value + '%');
+            badMatchProbSlider.addEventListener('input', (e) => document.getElementById('badMatchPercentLabel').textContent = e.target.value + '%');
+
+            function showNotification(text, duration = 1500, isBad = false) {
+                notification.textContent = text; 
+                if(isBad) notification.classList.add('bad'); else notification.classList.remove('bad');
+                notification.classList.add('show');
                 clearTimeout(notification._timeout); notification._timeout = setTimeout(() => notification.classList.remove('show'), duration);
             }
 
             function navigateTo(page) {
-                Object.values(pages).forEach(p => p.classList.remove('active'));
-                pages[page].classList.add('active');
+                Object.values(pages).forEach(p => p.classList.remove('active')); pages[page].classList.add('active');
                 navButtons.forEach(btn => { btn.classList.remove('active'); if (btn.dataset.page === page) btn.classList.add('active'); });
                 if (page === 'deposit') document.getElementById('depositBalance').textContent = user.gold.toLocaleString();
-                if (page === 'profile') { document.getElementById('profileUsername').textContent = user.name; document.getElementById('profileBalance').textContent = user.gold.toLocaleString(); }
+                if (page === 'profile') { 
+                    document.getElementById('profileUsername').textContent = user.name; 
+                    document.getElementById('profileBalance').textContent = user.gold.toLocaleString(); 
+                }
                 if (page === 'history') {
                     const list = document.getElementById('historyList');
-                    list.innerHTML = spinHistory.length ? spinHistory.map(h => `<div class="history-item"><div class="history-symbols">${h.symbols.map(s => s === 'kalbasi' ? '<img src="'+kalbasiImg.src+'" width="24" height="24">' : EMOJIS[s]).join(' ')}</div><span class="${h.win ? 'history-win' : 'history-loss'}">${h.win ? 'მოგება' : 'წაგება'}</span></div>`).join('') : '<p style="color:#888;">ისტორია ცარიელია</p>';
+                    list.innerHTML = spinHistory.length ? spinHistory.map(h => {
+                        let winText = h.win ? 'მოგება' : (h.poison ? 'მოწამვლა' : 'წაგება');
+                        let winClass = h.win ? 'history-win' : 'history-loss';
+                        return `<div class="history-item"><div class="history-symbols">${h.symbols.map(s => s === 'kalbasi' ? '<img src="'+kalbasiImg.src+'" width="24" height="24">' : (s === 'badkalbasi' ? '<img src="'+badKalbasiImg.src+'" width="24" height="24">' : EMOJIS[s])).join(' ')}</div><span class="${winClass}">${winText}</span></div>`;
+                    }).join('') : '<p style="color:#888;">ისტორია ცარიელია</p>';
                 }
             }
             navButtons.forEach(btn => btn.addEventListener('click', () => navigateTo(btn.dataset.page)));
 
             function saveUser() { localStorage.setItem('anzora_user', JSON.stringify(user)); localStorage.setItem('anzora_history', JSON.stringify(spinHistory)); localStorage.setItem('anzora_settings', JSON.stringify(settings)); }
+            
             function updateAllStatsDisplay() {
                 goldSpan.textContent = user.gold.toLocaleString(); document.getElementById('attackCount').textContent = user.attack;
                 document.getElementById('raidCount').textContent = user.raid; document.getElementById('shieldCount').textContent = user.shield;
             }
 
+            function updateAvatarDisplay() {
+                const profileAvatar = document.getElementById('profileAvatar');
+                if (user.avatar) {
+                    profileAvatar.innerHTML = `<img src="${user.avatar}" alt="Avatar">`;
+                } else {
+                    profileAvatar.innerHTML = '👤';
+                }
+            }
+
+            // ===== PROFILE PICTURE UPLOAD LOGIC =====
+            const avatarUpload = document.getElementById('avatarUpload');
+            document.getElementById('changeAvatarBtn').addEventListener('click', () => avatarUpload.click());
+
+            avatarUpload.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        user.avatar = e.target.result;
+                        saveUser();
+                        updateAvatarDisplay();
+                        showNotification('✅ ფოტო განახლდა');
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // ===== USERNAME CHANGE LOGIC =====
+            document.getElementById('changeUsernameBtn').addEventListener('click', () => {
+                const newName = document.getElementById('newUsernameInput').value.trim();
+                if (newName) {
+                    user.name = newName;
+                    saveUser();
+                    document.getElementById('profileUsername').textContent = user.name;
+                    document.getElementById('newUsernameInput').value = '';
+                    showNotification('✅ სახელი შეიცვალა');
+                }
+            });
+
             document.getElementById('loginBtn').addEventListener('click', () => {
                 const name = document.getElementById('usernameInput').value.trim();
-                if (name) { user.name = name; saveUser(); loginScreen.classList.add('hidden'); appDiv.classList.add('active'); updateAllStatsDisplay(); rebuildSlotMachine(); navigateTo('home'); }
+                if (name) { user.name = name; saveUser(); loginScreen.classList.add('hidden'); appDiv.classList.add('active'); updateAllStatsDisplay(); updateAvatarDisplay(); rebuildSlotMachine(); navigateTo('home'); }
             });
             document.getElementById('logoutBtn').addEventListener('click', () => { localStorage.clear(); location.reload(); });
 
             if (localStorage.getItem('anzora_user')) {
-                user = JSON.parse(localStorage.getItem('anzora_user')); spinHistory = JSON.parse(localStorage.getItem('anzora_history') || '[]'); settings = JSON.parse(localStorage.getItem('anzora_settings') || JSON.stringify(settings));
-                loginScreen.classList.add('hidden'); appDiv.classList.add('active'); updateAllStatsDisplay(); rebuildSlotMachine(); navigateTo('home');
+                user = JSON.parse(localStorage.getItem('anzora_user')); 
+                spinHistory = JSON.parse(localStorage.getItem('anzora_history') || '[]'); 
+                let savedSettings = JSON.parse(localStorage.getItem('anzora_settings') || '{}');
+                settings = { ...settings, ...savedSettings };
+                matchProbSlider.value = settings.matchPercent; document.getElementById('matchPercentLabel').textContent = settings.matchPercent + '%';
+                badMatchProbSlider.value = settings.badMatchPercent; document.getElementById('badMatchPercentLabel').textContent = settings.badMatchPercent + '%';
+                
+                loginScreen.classList.add('hidden'); appDiv.classList.add('active'); updateAllStatsDisplay(); updateAvatarDisplay(); rebuildSlotMachine(); navigateTo('home');
             } else { loginScreen.classList.remove('hidden'); appDiv.classList.remove('active'); }
+
+            document.getElementById('saveSettingsBtn').addEventListener('click', () => {
+                settings.matchPercent = parseFloat(matchProbSlider.value);
+                settings.badMatchPercent = parseFloat(badMatchProbSlider.value);
+                settings.reelCount = parseInt(document.getElementById('reelCountInput').value);
+                settings.coinReward = parseInt(document.getElementById('coinReward').value);
+                saveUser(); rebuildSlotMachine(); showNotification('✅ შენახულია');
+            });
 
             function rebuildSlotMachine() {
                 slotMachineDiv.innerHTML = ''; stripsElements = []; currentIndices = []; currentOutcomes = new Array(settings.reelCount).fill(null); baseStrips = [];
@@ -570,11 +446,18 @@
                     const cont = document.createElement('div'); cont.className = 'reel-container';
                     const strip = document.createElement('div'); strip.className = 'reel-strip';
                     cont.appendChild(strip); slotMachineDiv.appendChild(cont); stripsElements.push(strip);
+                    
                     const base = Array.from({length: BASE_LENGTH}, () => {
-                        const r = Math.random(); return r < 0.35 ? 'coin' : r < 0.5 ? 'attack' : r < 0.65 ? 'raid' : r < 0.8 ? 'shield' : 'kalbasi';
+                        const r = Math.random(); return r < 0.3 ? 'coin' : r < 0.45 ? 'attack' : r < 0.6 ? 'raid' : r < 0.75 ? 'shield' : r < 0.9 ? 'kalbasi' : 'badkalbasi';
                     });
                     baseStrips.push(base);
-                    strip.innerHTML = base.map(s => s === 'kalbasi' ? `<div class="symbol"><img src="${kalbasiImg.src}"></div>` : `<div class="symbol">${EMOJIS[s]}</div>`).join('').repeat(REPEAT_COUNT);
+                    
+                    strip.innerHTML = base.map(s => {
+                        if (s === 'kalbasi') return `<div class="symbol"><img src="${kalbasiImg.src}"></div>`;
+                        if (s === 'badkalbasi') return `<div class="symbol"><img src="${badKalbasiImg.src}"></div>`;
+                        return `<div class="symbol">${EMOJIS[s]}</div>`;
+                    }).join('').repeat(REPEAT_COUNT);
+                    
                     const startIdx = Math.floor(Math.random() * BASE_LENGTH); currentIndices.push(startIdx);
                     strip.style.transform = `translateY(-${startIdx * SYMBOL_HEIGHT}px)`;
                 }
@@ -586,17 +469,40 @@
             });
 
             document.getElementById('kalbasiRewardClose').addEventListener('click', () => kalbasiRewardOverlay.classList.remove('active'));
+            document.getElementById('poisonClose').addEventListener('click', () => poisonOverlay.classList.remove('active'));
 
             function spinComplete() {
                 if (spinAudioInterval) clearInterval(spinAudioInterval); spinAudioInterval = null;
                 clearTimeout(spinTimer);
-                const win = currentOutcomes.every(s => s === currentOutcomes[0]);
-                if (win) {
-                    if (currentOutcomes[0] === 'coin') { user.gold += settings.coinReward; showNotification(`+${settings.coinReward} მონეტა`); playWinSound(); }
+                
+                const isFullMatch = currentOutcomes.every(s => s === currentOutcomes[0]);
+                const badCount = currentOutcomes.filter(s => s === 'badkalbasi').length;
+                let isWin = false;
+                let isPoison = false;
+
+                if (badCount === settings.reelCount) {
+                    // ANTI-JACKPOT (ყველა კუბიკი ცუდი კალბასია)
+                    user.gold -= 5000000;
+                    if(user.gold < 0) user.gold = 0;
+                    poisonOverlay.classList.add('active');
+                    playPoisonSound();
+                    isPoison = true;
+                } else if (badCount > 0) {
+                    // ნაწილობრივი მოწამვლა, აჩვენებს მხოლოდ დაკლებულ რიცხვს
+                    const penalty = badCount * 300;
+                    user.gold -= penalty;
+                    if(user.gold < 0) user.gold = 0;
+                    showNotification(`-${penalty} 🪙`, 2000, true);
+                    playTone(150, 'sawtooth', 0.5, 0.2);
+                } else if (isFullMatch) {
+                    // მოგება
+                    isWin = true;
+                    if (currentOutcomes[0] === 'coin') { user.gold += settings.coinReward; showNotification(`+${settings.coinReward} 🪙`); playWinSound(); }
                     else if (currentOutcomes[0] === 'kalbasi') { user.gold += 10000000; kalbasiRewardOverlay.classList.add('active'); playJackpotSound(); }
                     else { user[currentOutcomes[0]] += settings[`${currentOutcomes[0]}Reward`]; showNotification(`+ მოგება!`); playWinSound(); }
                 }
-                spinHistory.unshift({ win, symbols: [...currentOutcomes] }); if(spinHistory.length > 50) spinHistory.pop();
+
+                spinHistory.unshift({ win: isWin, poison: isPoison, symbols: [...currentOutcomes] }); if(spinHistory.length > 50) spinHistory.pop();
                 saveUser(); updateAllStatsDisplay(); isSpinning = false; spinBtn.disabled = false;
             }
 
@@ -609,10 +515,18 @@
                 
                 startSpinAudio();
 
-                const prob = Math.pow(parseFloat(matchProbSlider.value || 1) / 100, 1 / settings.reelCount);
+                const probGood = Math.pow(parseFloat(matchProbSlider.value || 1) / 100, 1 / settings.reelCount);
+                const probBad = Math.pow(parseFloat(badMatchProbSlider.value || 1) / 100, 1 / settings.reelCount);
+
                 for (let i = 0; i < settings.reelCount; i++) {
                     const r = Math.random();
-                    currentOutcomes[i] = r < prob ? 'kalbasi' : (Math.random() < 0.4 ? 'coin' : SYMBOLS[Math.floor(Math.random() * 3) + 1]);
+                    if (r < probGood) {
+                        currentOutcomes[i] = 'kalbasi';
+                    } else if (r < probGood + probBad) {
+                        currentOutcomes[i] = 'badkalbasi';
+                    } else {
+                        currentOutcomes[i] = Math.random() < 0.4 ? 'coin' : SYMBOLS[Math.floor(Math.random() * 3) + 1];
+                    }
                 }
 
                 for (let i = 0; i < settings.reelCount; i++) {
@@ -620,7 +534,7 @@
                     strip.style.transition = 'none';
                     const startBaseIdx = currentIndices[i] % BASE_LENGTH;
                     strip.style.transform = `translateY(-${startBaseIdx * SYMBOL_HEIGHT}px)`;
-                    strip.offsetHeight; // reflow
+                    strip.offsetHeight; 
 
                     const targetIdx = baseStrips[i].indexOf(currentOutcomes[i]) + (4 + i) * BASE_LENGTH;
                     strip.style.transition = `transform ${1.5 + i * 0.25}s cubic-bezier(0.25, 0.8, 0.1, 1)`;
